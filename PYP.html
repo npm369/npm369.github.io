@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBSE Previous Year Paper and Compartment Paper</title>
+
+<!-- Open all links in new tab -->
+<base target="_blank">
+
+<style>
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#dfefff;
+}
+
+h1{
+    text-align:center;
+    padding:20px 10px;
+    color:#003366;
+    font-size:22px;
+}
+
+/* ===== THEME TOGGLE ===== */
+.toggle-btn{
+    position:fixed;
+    top:20px;
+    left:20px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:none;
+    font-weight:600;
+    cursor:pointer;
+    background:#111;
+    color:#fff;
+    z-index:1000;
+}
+body.dark-mode .toggle-btn{
+    background:#fff;
+    color:#111;
+}
+
+/* ===== GRID CONTAINER ===== */
+.container{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:25px;
+    padding:20px;
+    max-width:1400px;
+    margin:auto;
+}
+
+/* ===== CARD ===== */
+.card{
+    height:260px;
+    border-radius:18px;
+    overflow:hidden;
+    background-size:cover;
+    background-position:center;
+    box-shadow:0 6px 15px rgba(0,0,0,0.25);
+    position:relative;
+    cursor: grab;
+}
+.card.dragging{
+    opacity:0.6;
+    cursor: grabbing;
+}
+
+/* dark overlay */
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+}
+
+/* subject title */
+.subject{
+    color:white;
+    font-size:22px;
+    font-weight:bold;
+    margin-bottom:10px;
+    background:rgba(0,0,0,0.6);
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:8px;
+    width:fit-content;
+}
+
+/* links area */
+.links{
+    overflow-y:auto;
+    padding-right:5px;
+}
+
+/* scrollbar */
+.links::-webkit-scrollbar{
+    width:6px;
+}
+.links::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,0.6);
+    border-radius:6px;
+}
+
+/* links */
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* space between links */
+}
+
+.links a {
+  display: inline-block; /* don't take full width */
+  text-decoration: none;
+  background: white;
+  color: black;
+  padding: 6px 14px; /* smaller padding */
+  border-radius: 25px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  width: fit-content; /* only as wide as content */
+  transition: transform 0.2s;
+}
+
+.links a:hover {
+  transform: scale(1.05);
+}
+.links a{
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* BLUE BUTTON */
+.card:nth-child(even) .links a{
+  border:1px solid #00eaff;
+  color:#00eaff;
+  box-shadow:0 0 8px #00eaff;
+}
+.card:nth-child(even) .links a:hover{
+  background:#00eaff;
+  color:black;
+}
+
+/* RED BUTTON */
+.card:nth-child(odd) .links a{
+  border:1px solid #ff2d55;
+  color:#ff2d55;
+  box-shadow:0 0 8px #ff2d55;
+}
+.card:nth-child(odd) .links a:hover{
+  background:#ff2d55;
+  color:white;
+}
+
+/* ===== DARK MODE ===== */
+body.dark-mode{
+    background: #0b0f1a;
+    color: #e5e7eb;
+}
+body.dark-mode h1{
+    color:#fbbf24;
+}
+body.dark-mode .card{
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+body.dark-mode .overlay{
+    background:rgba(0,0,0,0.6);
+}
+body.dark-mode .links a{
+    background:transparent;
+}
+
+/* ===== MOBILE: FORCE 1 COLUMN ===== */
+@media (max-width: 768px){
+    .container{
+        grid-template-columns: 1fr !important;
+    }
+    .card{
+        height:320px;
+    }
+    .link{
+        width:85%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<button class="toggle-btn" id="themeBtn" onclick="toggleMode()">Dark Mode</button>
+<h1>CBSE Previous Year Paper and Compartment Paper</h1>
+
+<div class="container">
+
+<!-- Maths -->
+<div class="card" style="background-image:url('https://i.ibb.co/yFbby1WP/Maths.jpg');">
+<div class="overlay">
+<div class="subject">Maths</div>
+<div class="links">
+<a class="link" href="https://www.dropbox.com/scl/fo/p7ik35pcgmteiexs370y7/AFgd3yAV3ooafIJ7qVkUeKQ?dl=0">2025c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/2vbpt7uimq0qqr9fil10y/AJUV-jRNvqXoijJ9bDQQK0I?dl=0">2025</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/u8tp2yaro5iodq0qjnsk1/AOY23n90FdBdR9fi-rFn1i4?dl=0">2024c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/5sc87ki6kuefhndhkgrjv/ANUZNdLQ9A0lQSfHOcarHsM?dl=0">2024</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/c3xi4nxzfwhj977wv6fnx/AMLmGgpkEijUqhWfD6D9Ko8?dl=0">2023c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/3la3semp95btb6hyw270q/AD09PHTnZZXGwB0Ked7SG2w?dl=0">2023</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/exw646w318gp9msjfxww3/AHaAUa5bXbkzuzjC8Ae_z50?dl=0">2022c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/5p0rrlbvhidtc5ambf5j5/AJqjr-pgc50u_D4U6y6W6NQ?dl=0">2022</a>
+</div>
+
+<script>
+  const applyTheme = (theme) => {
+    document.body.classList.toggle("dark-mode", theme === "dark");
+    const btn = document.getElementById("themeBtn");
+    if (btn) btn.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+  };
+
+  const getTheme = () => localStorage.getItem("theme") || "dark";
+
+  function toggleMode() {
+    const next = getTheme() === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
+    applyTheme(next);
+  }
+
+  applyTheme(getTheme());
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "theme") applyTheme(e.newValue || "dark");
+  });
+
+  // Drag and drop reorder within this section
+  const container = document.querySelector(".container");
+  const cards = document.querySelectorAll(".card");
+
+  cards.forEach(card => {
+    card.setAttribute("draggable", "true");
+    card.addEventListener("dragstart", (e) => {
+      e.dataTransfer.setData("text/plain", "");
+      card.classList.add("dragging");
+    });
+    card.addEventListener("dragend", () => {
+      card.classList.remove("dragging");
+    });
+  });
+
+  document.querySelectorAll(".links a").forEach(a => a.setAttribute("draggable", "false"));
+
+  if (container) {
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const dragging = document.querySelector(".dragging");
+      if (!dragging) return;
+      const target = e.target.closest(".card");
+      if (!target || target === dragging || !container.contains(target)) return;
+      const rect = target.getBoundingClientRect();
+      const isAfter = (e.clientY > rect.top + rect.height / 2) || (e.clientX > rect.left + rect.width / 2);
+      if (isAfter) {
+        container.insertBefore(dragging, target.nextSibling);
+      } else {
+        container.insertBefore(dragging, target);
+      }
+    });
+  }
+</script>
+</div>
+</div>
+
+<!-- English -->
+<div class="card" style="background-image:url('https://i.ibb.co/NnkWFmkf/English.jpg');">
+<div class="overlay">
+<div class="subject">English</div>
+<div class="links">
+<a class="link" href="https://www.dropbox.com/scl/fo/jl48i8ow0r6wo0a10jnyg/AElcPoTKvKbX5pdSFOCpOkY?dl=0">2025c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/dwnbms9jpvvkmwx0st5q0/ALNdtytliDMKSph-Q9TEMzo?dl=0">2025</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/qj16rbu873rngh1k3a7zh/ADdeFriradFx4eCqiBLZiII?dl=0">2024c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/dxzn5togwtc707cge3jqr/AL5WVuuYMFI0QWf4JW1DG1k?dl=0">2024</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/nr6z5kme7w7umyi9nf7nq/AF5waVTVO8NAkCO3d1rrEIw?dl=0">2023c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/lpylr6td6pb2lmejj9gis/AIml_Pw5DkHfJ_UhGpV52N4?dl=0">2023</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/ky12xkr8gtvcanyuz4fmo/AEMc6e-Q2OGvLMA4X0pdWBI?dl=0">2022c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/udpbusz8743e5dz2dci0r/APdQvNUvbs9PCNV93tsF2ro?dl=0">2022</a>
+</div>
+</div>
+</div>
+
+<!-- Computer -->
+<div class="card" style="background-image:url('https://i.ibb.co/B2x9WMhM/Computer.jpg');">
+<div class="overlay">
+<div class="subject">Computer</div>
+<div class="links">
+<a class="link" href="https://drive.google.com/file/d/1ix1JUScO4RIMv9N6aeKtON-GbUpZAwz0/view">2025c</a>
+<a class="link" href="https://www.cbse.gov.in/cbsenew/question-paper/2025/XII/91_COMPUTER_SCIENCE.pdf">2025</a>
+<a class="link" href="https://drive.google.com/file/d/1wOwQWobht_pNhT3TYOO-zRzEjZX2xvgG/view">2024c</a>
+<a class="link" href="https://drive.google.com/file/d/1DKBaso3A1a84CRNA_9iWbx1NPLcnir9s/view">2024</a>
+<a class="link" href="https://drive.google.com/file/d/1KHYmg8ScnYzGa0E6z8D_dikv8Wlx-JJW/view">2023c</a>
+<a class="link" href="https://drive.google.com/file/d/12awQEHsaKkzlEvKocGmbQHc542R4zraV/view">2023</a>
+<a class="link" href="https://drive.google.com/file/d/1LLueqaFxa3QWTcGpfHTC3JkXLPe2bTWl/view">2022c</a>
+<a class="link" href="https://drive.google.com/file/d/1_tqrFege5UNrqMn_CtoZSbEWYTWUxpi3/view">2022</a>
+</div>
+</div>
+</div>
+
+<!-- Chemistry -->
+<div class="card" style="background-image:url('https://i.ibb.co/cXtV2zXT/Chemistry.jpg');">
+<div class="overlay">
+<div class="subject">Chemistry</div>
+<div class="links">
+<a class="link" href="https://www.dropbox.com/scl/fo/2aqxj0jzdwt9s2i0bsmj7/AAFBvrC6Uaz4bPWEND77_gc?dl=0">2025c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/kgl01ifhaomd8jssrm4tu/ANypUKBsCDIN4rGu9tEc3yM?dl=0">2025</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/b2icf9cq706s7k7pf1rnu/ALjOsYt3VbZQK4FQE70NHug?dl=0">2024c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/91uskwum6f3579uaxwuux/AKvMth_jKYv0qjoAbmWrr44?dl=0">2024</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/tupc086knr11mqyxbskrp/AH4o-LEkWOL4b4eBxd11byQ?dl=0">2023c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/ghy6w9kj6ked2gkqbeh95/AFmhfrKbErY3WQSSz1gMKGM?dl=0">2023</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/n6jz19qnbdpha55lvrri5/ABfeigROVt-5jaYHQqMoemE?dl=0">2022c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/pww8uv0pncoxtignxaopb/AH30OFYMaOkS2eN51rynl6o?dl=0">2022</a>
+</div>
+</div>
+</div>
+
+<!-- Physics -->
+<div class="card" style="background-image:url('https://i.ibb.co/9mxYJHcY/Physics.jpg');">
+<div class="overlay">
+<div class="subject">Physics</div>
+<div class="links">
+<a class="link" href="https://www.dropbox.com/scl/fo/irt6bcgpjzmmarpx0sw1f/AINWGZJ52K56CvNpMCSD_1c?dl=0">2025c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/tprsw4sanlqrjswnohk52/ABU608mfJkoijvM867t2bVg?dl=0">2025</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/a9jr8r90us41tqfmclwos/ALMAWseTirqI82fe2xkUOtw?dl=0">2024c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/2en7mb2at6vvbtdhqbo5p/AHw7zhLcQ4Ct373SFVM3lxw?dl=0">2024</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/amisrdp3mn94n4zm6faya/ANRs52HQZ1wghT10-tFE60A?dl=0">2023c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/1ara3aku55hukydw19bsw/AF0A0_RP4sbRnB_H9xUwTmY?dl=0">2023</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/v5io9326ailbjy31juuft/ACShojoHBLd2BsZRRZgboMw?dl=0">2022c</a>
+<a class="link" href="https://www.dropbox.com/scl/fo/o6wokkbw43gg7grwm160j/ADsjh21cb59j3Bsvpd9XgBY?dl=0">2022</a>
+</div>
+</div>
+</div>
+
+<!-- P.E -->
+<div class="card" style="background-image:url('https://i.ibb.co/3YcKSGjG/P-E.jpg');">
+<div class="overlay">
+<div class="subject">P.E</div>
+<div class="links">
+<a class="link" href="https://drive.google.com/file/d/1puRIVFef0FwS_aopu3cOMMVUjok--0Sd/view">2025c</a>
+<a class="link" href="https://www.cbse.gov.in/cbsenew/question-paper/2025/XII/75_Physical%20Education.pdf">2025</a>
+<a class="link" href="https://drive.google.com/file/d/12K0jlbFxkcWBxC3m2MCOf8JxkWD2HlV5/view">2024c</a>
+<a class="link" href="https://drive.google.com/file/d/1D3vk5crssjXF1lq5p4rXglxvcmWXaysk/view">2024</a>
+<a class="link" href="https://drive.google.com/file/d/1RfPhg6_sqKg1KEuHRg-luxmq0z531dy4/view">2023c</a>
+<a class="link" href="https://drive.google.com/file/d/1GUqucwqoaf7jXEuvbxutQs6h6TPevQgj/view">2023</a>
+<a class="link" href="https://drive.google.com/file/d/1-wiv2LzdAbBjeoRDLTzXMx_Nrf99rwSn/view">2022c</a>
+<a class="link" href="https://drive.google.com/file/d/1hpBU6p7uuLCOyidXnLjAHjh-IvhXs0os/view">2022</a>
+</div>
+</div>
+</div>
+
+</div>
+
+</body>
+</html>

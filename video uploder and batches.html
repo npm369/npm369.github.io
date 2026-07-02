@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+    margin:0;
+    background:#111;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial;
+}
+
+.player{
+    width:1000px;
+    position:relative;
+    background:black;
+    border-radius:15px;
+    overflow:hidden;
+}
+
+.player.theater{
+    width:1400px;
+}
+
+video{
+    width:100%;
+    display:block;
+}
+
+.controls{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    background:linear-gradient(transparent, rgba(0,0,0,0.8));
+    opacity:1;
+    transition:opacity 0.3s;
+}
+
+.controls.hide{
+    opacity:0;
+}
+
+button{
+    background:none;
+    border:none;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+input[type=range]{
+    flex:1;
+}
+
+.time{
+    color:white;
+    font-size:14px;
+}
+
+.player:fullscreen{
+    width:100vw;
+    height:100vh;
+}
+
+.player:fullscreen video{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+.video-title{
+    position:absolute;
+    top:15px;
+    left:15px;
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    z-index:3;
+    opacity:1;
+    transition:opacity 0.3s;
+}
+.video-title.hide{
+    opacity:0;
+}
+.speed-box{
+    position:relative;
+}
+
+.speed-menu{
+    position:absolute;
+    bottom:40px;
+    right:0;
+    background:rgba(20,20,20,0.95);
+    border-radius:10px;
+    overflow:hidden;
+    display:none;
+    min-width:80px;
+}
+
+.speed-menu div{
+    color:white;
+    padding:10px;
+    cursor:pointer;
+    text-align:center;
+}
+
+.speed-menu div:hover{
+    background:#333;
+}
+
+.speed-menu.show{
+    display:block;
+}
+#volume{
+    width:80px;
+    height:4px;
+    cursor:pointer;
+}
+#volume{
+    accent-color:white;
+}
+</style>
+</head>
+<body>
+
+<div class="player" id="playerBox">
+<div class="video-title">life</div>
+    <video id="video">
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+    </video>
+
+    <div class="controls" id="controls">
+        <button id="play">▶</button>
+        <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+        <div class="volume-box">
+            <button id="volBtn">🔊</button>
+
+            <div class="volume-menu" id="volumeMenu">
+                <input type="range" id="volume" min="0" max="1" step="0.1" value="1">
+            </div>
+        </div>
+        <input type="range" id="progress" value="0">
+        <div class="speed-box">
+            <button id="speedBtn">⚡</button>
+
+            <div class="speed-menu" id="speedMenu">
+                <div data-speed="0.25">0.25x</div>
+                <div data-speed="0.5">0.5x</div>
+                <div data-speed="1">1x</div>
+                <div data-speed="1.25">1.25x</div>
+                <div data-speed="1.5">1.5x</div>
+                <div data-speed="2">2x</div>
+                <div data-speed="4">4x</div>
+            </div>
+        </div>
+        <span class="time" id="time">0:00 / 0:00</span>
+        <button id="fullscreen">⛶</button>
+    </div>
+
+</div>
+
+<script>
+let video=document.getElementById("video");
+let play=document.getElementById("play");
+let progress=document.getElementById("progress");
+let time=document.getElementById("time");
+let fullscreen=document.getElementById("fullscreen");
+let playerBox=document.getElementById("playerBox");
+let controls=document.getElementById("controls");
+
+let hideTimer;
+
+function startHideTimer(){
+    clearTimeout(hideTimer);
+    hideTimer=setTimeout(()=>{
+        controls.classList.add("hide");
+    },3000);
+}
+
+playerBox.addEventListener("mousemove",function(){
+    controls.classList.remove("hide");
+    startHideTimer();
+});
+
+startHideTimer();
+
+play.onclick=function(){
+    if(video.paused){
+        video.play();
+        play.innerHTML="⏸";
+    }else{
+        video.pause();
+        play.innerHTML="▶";
+    }
+}
+
+video.ontimeupdate=function(){
+    progress.value=(video.currentTime/video.duration)*100;
+
+    let current=Math.floor(video.currentTime);
+    let total=Math.floor(video.duration);
+
+    let cmin=Math.floor(current/60);
+    let csec=current%60;
+
+    let tmin=Math.floor(total/60);
+    let tsec=total%60;
+
+    time.innerHTML=
+    cmin+":"+(csec<10?"0"+csec:csec)
+    +" / "+
+    tmin+":"+(tsec<10?"0"+tsec:tsec);
+}
+
+progress.oninput=function(){
+    video.currentTime=(progress.value*video.duration)/100;
+}
+
+fullscreen.onclick=function(){
+    if(!document.fullscreenElement){
+        playerBox.requestFullscreen();
+    }else{
+        document.exitFullscreen();
+    }
+}
+let speedBtn=document.getElementById("speedBtn");
+let speedMenu=document.getElementById("speedMenu");
+
+speedBtn.onclick=function(){
+    speedMenu.classList.toggle("show");
+}
+
+
+document.querySelectorAll(".speed-menu div").forEach(item=>{
+    item.onclick=function(){
+        video.playbackRate=item.dataset.speed;
+        speedMenu.classList.remove("show");
+    }
+});
+document.addEventListener("click",function(e){
+
+    if(!speedBtn.contains(e.target) && !speedMenu.contains(e.target)){
+        speedMenu.classList.remove("show");
+    }
+
+});
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key===" "){
+        e.preventDefault();
+        if(video.paused){
+            video.play();
+            play.innerHTML="⏸";
+        }else{
+            video.pause();
+            play.innerHTML="▶";
+        }
+    }
+
+    if(e.key==="f" || e.key==="F"){
+        if(!document.fullscreenElement){
+            playerBox.requestFullscreen();
+        }else{
+            document.exitFullscreen();
+        }
+    }
+
+    if(e.key==="t" || e.key==="T"){
+        playerBox.classList.toggle("theater");
+    }
+
+});
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="j" || e.key==="J" || e.key==="ArrowLeft"){
+        video.currentTime -= 5;
+    }
+
+    if(e.key==="l" || e.key==="L" || e.key==="ArrowRight"){
+        video.currentTime += 5;
+    }
+
+    if(e.key==="k" || e.key==="K" || e.key===" "){
+        e.preventDefault();
+
+        if(video.paused){
+            video.play();
+            play.innerHTML="⏸";
+        }else{
+            video.pause();
+            play.innerHTML="▶";
+        }
+    }
+
+    if(e.key==="f" || e.key==="F" || e.key==="ArrowUp"){
+        if(!document.fullscreenElement){
+            playerBox.requestFullscreen();
+        }else{
+            document.exitFullscreen();
+        }
+    }
+
+  if(e.key>="0" && e.key<="9"){
+    let part = Number(e.key);
+    video.currentTime = (video.duration/10)*part;
+}
+
+});
+document.addEventListener("keydown",function(e){
+
+    if(e.code==="Space"){
+        e.preventDefault();
+
+        if(video.paused){
+            video.play();
+            play.innerHTML="⏸";
+        }else{
+            video.pause();
+            play.innerHTML="▶";
+        }
+    }
+
+});
+let title=document.querySelector(".video-title");
+
+playerBox.addEventListener("mousemove",function(){
+
+    controls.classList.remove("hide");
+    title.classList.remove("hide");
+
+    clearTimeout(hideTimer);
+
+    hideTimer=setTimeout(()=>{
+        controls.classList.add("hide");
+        title.classList.add("hide");
+    },3000);
+
+});
+let volume=document.getElementById("volume");
+
+volume.oninput=function(){
+    video.volume=volume.value;
+}
+
+</script>
+
+</body>
+</html>

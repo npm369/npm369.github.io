@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PowerMind — Premium Courses</title>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg-2: #0f1629;
+      --card: #111a2e;
+      --card-2: #0f1a33;
+      --accent: #f97316;
+      --accent-2: #fbbf24;
+      --accent-3: #22d3ee;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    [data-theme="light"] {
+      --bg: #f4f6fb;
+      --bg-2: #e8eef7;
+      --card: #ffffff;
+      --card-2: #f3f5f9;
+      --accent: #f97316;
+      --accent-2: #fbbf24;
+      --accent-3: #0ea5e9;
+      --text: #0b1220;
+      --muted: #4b5563;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Satoshi", "Poppins", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #1e293b 0%, transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, #0ea5e9 0%, transparent 45%),
+        linear-gradient(180deg, var(--bg) 0%, #05080f 100%);
+      min-height: 100vh;
+    }
+    [data-theme="light"] body {
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #dbeafe 0%, transparent 60%),
+        radial-gradient(900px 700px at 110% 10%, #fde68a 0%, transparent 45%),
+        linear-gradient(180deg, var(--bg) 0%, #f8fafc 100%);
+    }
+    [data-theme="light"] .dashboard-page {
+      background: #f8fafc;
+    }
+    [data-theme="light"] body.dashboard-open header {
+      background: #ffffff;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+    }
+    [data-theme="light"] .dash-sidebar {
+      background: #ffffff;
+    }
+    [data-theme="light"] .dash-content {
+      background: #ffffff;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: 95vw;
+      max-width: 95vw;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      background: rgba(6, 9, 16, 0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    body.dashboard-open header {
+      backdrop-filter: none;
+      background: #0b0f1a;
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      gap: 16px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
+      box-shadow: 0 8px 25px rgba(34, 211, 238, 0.35);
+    }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      border: none;
+      background: #1f2a44;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn.primary {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      color: #0b0f1a;
+    }
+    .btn.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.1); }
+
+    /* Hero */
+    .hero {
+      padding: 60px 0 30px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 2.8vw, 3.5rem);
+      line-height: 1.1;
+      margin: 0 0 14px;
+    }
+    .hero p { color: var(--muted); font-size: 1.05rem; }
+    .hero-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 22px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+    .hero-slideshow {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    .hero-frame img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+      border-radius: 12px;
+      z-index: 1;
+    }
+    .no-transition {
+      transition: none !important;
+    }
+    .slide-current {
+      transform: translateX(0);
+      opacity: 1;
+      z-index: 2;
+    }
+    .slide-next {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 1;
+    }
+    .slide-animate-out {
+      transform: translateX(-100%);
+      opacity: 1;
+    }
+    .slide-animate-in {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .hero-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .hero-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+    .hero-dot.active {
+      background: var(--accent-2);
+      transform: scale(1.2);
+    }
+    .hero-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+    .metric {
+      background: rgba(0,0,0,0.35);
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .input, select {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      outline: none;
+      min-width: 200px;
+    }
+
+    /* Course grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+    }
+    .course-card {
+      background: linear-gradient(180deg, var(--card) 0%, var(--card-2) 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .course-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .course-body { padding: 16px; }
+    .tag {
+      display: inline-block;
+      background: rgba(34,211,238,0.12);
+      color: var(--accent-3);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .price { font-weight: 700; }
+    .muted { color: var(--muted); }
+
+    /* Sections */
+    section { padding: 36px 0; }
+    .section-title { display: flex; align-items: center; justify-content: space-between; }
+
+    /* Dashboard */
+    .panel {
+      background: rgba(17,26,46,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .tabs { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+    .tab { padding: 8px 12px; border-radius: 10px; background: #141c30; cursor: pointer; }
+    .tab.active { background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%); color: #0b0f1a; font-weight: 700; }
+    .hidden { display: none; }
+
+    /* Dashboard page */
+    .dashboard-page {
+      min-height: calc(100vh - 70px);
+      background: #000;
+      padding: 30px 0 60px;
+    }
+    .dashboard-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .dashboard-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .dash-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 18px;
+    }
+    .dash-sidebar {
+      background: linear-gradient(180deg, #0a0f1b 0%, #060a13 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 16px;
+      min-height: 520px;
+      box-shadow: var(--shadow);
+    }
+    .dash-label {
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+    .dash-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: var(--text);
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .dash-item:hover {
+      background: rgba(255,255,255,0.06);
+      transform: translateX(2px);
+    }
+    .dash-item.active {
+      background: linear-gradient(135deg, rgba(249,115,22,0.25), rgba(251,191,36,0.15));
+      border-color: rgba(249,115,22,0.4);
+    }
+    .dash-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.06);
+      font-weight: 700;
+    }
+    .dash-content {
+      background: rgba(8,12,20,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 520px;
+    }
+    .resource-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .resource-card {
+      background: #0f172a;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .resource-card:hover {
+      transform: translateY(-2px);
+    }
+    .resource-card:nth-child(1) {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #0b0f1a;
+      box-shadow: 0 10px 24px rgba(34,197,94,0.35);
+    }
+    .resource-card:nth-child(2) {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(59,130,246,0.35);
+    }
+    .resource-card:nth-child(3) {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(239,68,68,0.35);
+    }
+    .resource-card:nth-child(4) {
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(139,92,246,0.35);
+    }
+    @media (max-width: 900px) {
+      .dash-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Modals */
+    .backdrop {
+      position: fixed; inset: 0; background: rgba(3,6,12,0.8);
+      display: none; align-items: center; justify-content: center; z-index: 50;
+    }
+    .modal {
+      width: min(520px, 92vw);
+      background: #0e1628;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .modal h3 { margin-top: 0; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .video-wrap { margin: 12px 0; }
+    .video-wrap video {
+      width: 100%;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0f172a;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+    /* Footer */
+    footer { padding: 30px 0 60px; color: var(--muted); }
+
+    /* Loader */
+    .loader {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent-2);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .nav { flex-direction: column; align-items: flex-start; }
+      .nav-actions { flex-wrap: wrap; }
+      .hero-metrics { grid-template-columns: 1fr; }
+      .filters { flex-direction: column; }
+      .input, select { width: 100%; min-width: 0; }
+      .hero-frame { aspect-ratio: 4 / 3; }
+      .dash-layout { grid-template-columns: 1fr; }
+      .dashboard-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .resource-cards { grid-template-columns: repeat(2, 1fr); }
+      iframe { height: 820px !important; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <div class="brand-mark"></div>
+        PowerMind
+      </div>
+      <div class="nav-actions">
+        <button class="btn ghost" id="btnTheme">Light Mode</button>
+        <button class="btn ghost" id="btnGoCourses">Courses</button>
+        <button class="btn ghost" id="btnLogin">Login via OTP</button>
+        <button class="btn ghost hidden" id="btnLogout">Logout</button>
+        <button class="btn primary" id="btnDashboard">Dashboard</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" id="homePage">
+    <section class="hero">
+      <div>
+        <h1>learn from premium courses with enterprise-grade experience.</h1>
+        <p>Modern learning platform with OTP authentication, secure checkout, and a stunning catalog designed to convert casual visitors into active learners.</p>
+        <div class="row" style="margin-top:16px;">
+          <button class="btn primary" id="btnExplore">Explore Courses</button>
+          <button class="btn ghost" id="btnBecome">Become an Instructor</button>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <div class="price" id="learnerCount">120000</div>
+            <div class="muted">Learners</div>
+          </div>
+          <div class="metric">
+            <div class="price">4.9/5</div>
+            <div class="muted">Avg. Rating</div>
+          </div>
+          <div class="metric">
+            <div class="price">₹2.4Cr</div>
+            <div class="muted">Payouts</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-card">
+        <h3>Featured Program</h3>
+        <p class="muted">JEE Class 11+12 • Live + Recorded</p>  
+        <div class="hero-slideshow">
+          <div class="hero-frame">
+            <img id="heroImageCurrent" class="hero-image slide-current" alt="Course preview" />
+            <img id="heroImageNext" class="hero-image slide-next" alt="Course preview" />
+          </div>
+          <div class="hero-dots" id="heroDots"></div>
+        </div>
+        <div class="row" style="margin-top:12px;">
+          <button class="btn primary" onclick="openCourse('c1')">View details</button>
+          <button class="btn ghost" onclick="startPurchase('c1')">Buy ₹14,999</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="guestVideo">
+      <div class="section-title">
+        <h2>Quick Tour</h2>
+        <div class="muted">A smooth intro to how PowerMind works.</div>
+      </div>
+      <div class="panel">
+        <video
+          id="promoVideo"
+          src="test.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          style="width:100%; border-radius:14px; background:#000;"
+        ></video>
+      </div>
+    </section>
+
+    <section id="catalog">
+      <div class="section-title">
+        <h2>Course Catalog</h2>
+        <div class="muted">Search, filter, and find your next skill.</div>
+      </div>
+      <div class="filters">
+        <select id="classFilter">
+          <option value="">Select Class</option>
+          <option value="Class 11">Class 11</option>
+          <option value="Class 12">Class 12</option>
+          <option value="Class 10">Class 10</option>
+          <option value="Class 9">Class 9</option>
+          <option value="Class 1-8">Class 1-8</option>
+          <option value="After 12th">After 12th</option>
+          <option value="More">More...</option>
+        </select>
+        <select id="categoryFilter" class="hidden">
+          <option value="">Select Category</option>
+        </select>
+        <input class="input" id="searchInput" placeholder="Search courses..." />
+      </div>
+      <div class="grid" id="courseGrid"></div>
+    </section>
+
+
+    <section id="dashboardSection" class="hidden">
+      <div class="section-title">
+        <h2>Dashboard</h2>
+        <div class="muted" id="userStatus">Not logged in</div>
+      </div>
+      <div class="panel">
+        <div class="tabs">
+          <div class="tab active" data-tab="purchased">My Courses</div>
+          <div class="tab" data-tab="admin">Admin Panel</div>
+        </div>
+        <div id="tab-purchased">
+          <div class="grid" id="purchasedGrid"></div>
+        </div>
+        <div id="tab-admin" class="hidden">
+          <h3>Admin Controls</h3>
+          <p class="muted">Add, edit, and delete courses. Upload materials (mock).</p>
+          <div class="row" style="margin-bottom:12px;">
+            <input class="input" id="adminTitle" placeholder="Course title" />
+            <input class="input" id="adminPrice" placeholder="Price (₹)" />
+            <select id="adminCategory">
+              <option value="CBSE">CBSE</option>
+              <option value="JEE">JEE</option>
+              <option value="NEET">NEET</option>
+              <option value="CUET">CUET</option>
+              <option value="CA">CA</option>
+              <option value="UPSE">UPSE</option>
+            </select>
+          </div>
+          <div class="row">
+            <input class="input" id="adminThumb" placeholder="Thumbnail URL" />
+            <input class="input" id="adminInstructor" placeholder="Instructor name" />
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <button class="btn primary" id="btnAddCourse">Add Course</button>
+            <button class="btn ghost" id="btnSeed">Seed Demo Data</button>
+          </div>
+          <h4 style="margin-top:18px;">Course Manager</h4>
+          <div id="adminCourseList"></div>
+          <h4 style="margin-top:18px;">Users & Purchases</h4>
+          <table>
+            <thead>
+              <tr><th>User</th><th>Mobile</th><th>Purchases</th></tr>
+            </thead>
+            <tbody id="adminUsers"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section id="dashboardPage" class="dashboard-page hidden">
+    <div class="container">
+      <div class="dashboard-bar">
+        <div class="dashboard-title">Dashboard</div>
+        <button class="btn ghost" id="btnExitDashboard">Exit</button>
+      </div>
+      <div class="dash-layout">
+        <aside class="dash-sidebar">
+          <div class="dash-label">POWERMIND</div>
+          <div class="dash-item active" data-tab="study">
+            <div class="dash-icon">S</div>
+            Study
+          </div>
+          <div class="dash-item" data-tab="resources">
+            <div class="dash-icon">P</div>
+            Resources
+          </div>
+          <div class="dash-item" data-tab="library">
+            <div class="dash-icon">L</div>
+            Library
+          </div>
+        </aside>
+        <div class="dash-content">
+          <div id="dashStudy">
+            <h3 style="margin-top:0;">Study</h3>
+            <div id="dashboardCourses" style="margin-top:18px;"></div>
+          </div>
+          <div id="dashResources" class="hidden">
+            <h3 style="margin-top:0;">Resources</h3>
+            <div class="resource-cards">
+              <button class="resource-card" id="btnSQP">SQP</button>
+              <button class="resource-card" id="btnPYP">PYP</button>
+              <button class="resource-card" id="btnCBQ">CBQ's</button>
+              <button class="resource-card" id="btnOthers">Others</button>
+            </div>
+            <div id="resourceContent" style="margin-top:16px;">
+              <iframe id="sqpFrame" class="hidden" src="sqp.html" style="width:100%; height:1000px; border:0; border-radius:12px; background:#000;"></iframe>
+              <iframe id="pypFrame" class="hidden" src="pyp.html" style="width:100%; height:1000px; border:0; border-radius:12px; background:#000;"></iframe>
+              <iframe id="cbqFrame" class="hidden" src="cb.html" style="width:100%; height:1000px; border:0; border-radius:12px; background:#000;"></iframe>
+            </div>
+          </div>
+          <div id="dashLibrary" class="hidden">
+            <h3 style="margin-top:0;">Library</h3>
+            <div class="muted">Library content coming soon.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="row" style="justify-content: space-between;">
+      <div>
+        <div class="brand">
+    <div class="brand-mark"></div>
+          PowerMind
+        </div>
+        <div class="muted">Secure OTP login - Payments via Razorpay - Production-ready UI</div>
+      </div>
+      <div class="muted">(c) 2026 PowerMind. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Login Modal -->
+  <div class="backdrop" id="loginModal">
+    <div class="modal">
+      <h3>Login with OTP</h3>
+      <p class="muted">Use mobile number or email. OTP expires in 2 minutes.</p>
+      <div class="row">
+        <input class="input" id="loginMobile" placeholder="Mobile number" />
+        <input class="input" id="loginEmail" placeholder="Email (optional)" />
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <select id="loginClass" class="input">
+          <option value="">Select Class</option>
+          <option value="Class 11">Class 11</option>
+          <option value="Class 12">Class 12</option>
+          <option value="Class 10">Class 10</option>
+          <option value="Class 9">Class 9</option>
+          <option value="Class 1-8">Class 1-8</option>
+          <option value="After 12th">After 12th</option>
+          <option value="More">More...</option>
+        </select>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button class="btn primary" id="btnSendOtp">Send OTP</button>
+        <div id="otpTimer" class="muted"></div>
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <input class="input" id="otpInput" placeholder="Enter OTP" />
+        <button class="btn ghost" id="btnVerifyOtp">Verify</button>
+        <button class="btn ghost" id="btnResendOtp">Resend OTP</button>
+      </div>
+      <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn" onclick="toggleModal('loginModal', false)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Course Detail Modal -->
+  <div class="backdrop" id="courseModal">
+    <div class="modal">
+      <h3 id="courseTitle">Course</h3>
+      <div id="courseMeta" class="muted"></div>
+      <div id="courseSyllabus" style="margin:10px 0;"></div>
+      <div class="video-wrap">
+        <video id="courseVideo" muted></video>
+      </div>
+      <div class="row">
+        <button class="btn ghost" id="btnVideoToggle">Pause</button>
+        <button class="btn primary" id="btnBuyNow">Purchase</button>
+        <button class="btn ghost" onclick="toggleModal('courseModal', false)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="backdrop" id="paymentModal">
+    <div class="modal" style="max-width:480px;width:94vw;">
+
+      <!-- STEP 1: Discount Code -->
+      <div id="payStep1">
+        <h3>🎟️ Have a Discount Code?</h3>
+        <p class="muted">Enter a code for a discount, or skip to proceed at full price.</p>
+        <div id="payCourseSummary" style="background:var(--card-2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;margin-bottom:16px;"></div>
+        <div class="row" style="margin-bottom:6px;">
+          <input class="input" id="discountInput" placeholder="Enter discount code (optional)" style="flex:1;"/>
+          <button class="btn ghost" id="btnApplyCode">Apply</button>
+        </div>
+        <div id="discountMsg" class="muted" style="margin-bottom:14px;min-height:18px;font-size:.85rem;"></div>
+        <div id="payFinalPrice" style="font-size:1.1rem;font-weight:700;margin-bottom:18px;"></div>
+        <div class="row">
+          <button class="btn primary" id="btnProceedPay">Proceed to Payment →</button>
+          <button class="btn ghost" onclick="toggleModal('paymentModal',false)">Cancel</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Choose Payment Method -->
+      <div id="payStep2" class="hidden">
+        <h3>💳 Choose Payment Method</h3>
+        <p class="muted" id="payStep2Summary"></p>
+
+        <div class="pay-method-card" id="payMethodUPI" onclick="selectPayMethod('upi')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.6rem;">📱</span>
+            <div>
+              <div style="font-weight:600;">UPI / Online</div>
+              <div class="muted" style="font-size:.8rem;">GPay · PhonePe · Paytm · Any UPI App</div>
+            </div>
+          </div>
+          <div class="pay-radio" id="radioUPI"></div>
+        </div>
+
+        <div class="pay-method-card" id="payMethodCard" onclick="selectPayMethod('card')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.6rem;">💳</span>
+            <div>
+              <div style="font-weight:600;">Debit / Credit Card</div>
+              <div class="muted" style="font-size:.8rem;">Visa · Mastercard · RuPay</div>
+            </div>
+          </div>
+          <div class="pay-radio" id="radioCard"></div>
+        </div>
+
+        <div class="pay-method-card" id="payMethodCash" onclick="selectPayMethod('cash')">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.6rem;">🏪</span>
+            <div>
+              <div style="font-weight:600;">Cash at Centre</div>
+              <div class="muted" style="font-size:.8rem;">Pay at any PowerMind learning centre</div>
+            </div>
+          </div>
+          <div class="pay-radio" id="radioCash"></div>
+        </div>
+
+        <div id="upiDetails" class="hidden" style="background:var(--card-2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;margin-top:12px;text-align:center;">
+          <div style="font-size:.82rem;color:var(--muted);margin-bottom:8px;">Send payment to this UPI ID</div>
+          <div style="font-size:1.1rem;font-weight:700;letter-spacing:.04em;color:var(--accent-2);margin-bottom:10px;" id="upiIdDisplay">yourname@upi</div>
+          <div style="font-size:.78rem;color:var(--muted);margin-bottom:4px;">After paying, enter your UPI Transaction ID below:</div>
+          <input class="input" id="upiTxnInput" placeholder="e.g. 406123456789" style="margin-top:6px;"/>
+        </div>
+
+        <div id="cardDetails" class="hidden" style="background:var(--card-2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;margin-top:12px;text-align:center;">
+          <div style="font-size:.9rem;color:var(--muted);line-height:1.7;">
+            💳 Card payments will be available soon via Razorpay.<br>
+            Contact us at <strong style="color:var(--accent);">powermind@email.com</strong> to pay by card right now.
+          </div>
+        </div>
+
+        <div id="cashDetails" class="hidden" style="background:var(--card-2);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:16px;margin-top:12px;">
+          <div style="font-size:.88rem;line-height:1.8;">
+            🏪 <strong>Visit any PowerMind Centre:</strong><br>
+            <span class="muted">• Centre 1: 12, Sector 18, Noida, UP<br>
+            • Centre 2: 45, Rajouri Garden, New Delhi<br>
+            • Timings: Mon–Sat, 9 AM – 7 PM</span><br><br>
+            Mention your registered mobile number and course name at the counter.
+          </div>
+        </div>
+
+        <div id="paymentMsg" class="muted" style="margin-top:12px;min-height:18px;font-size:.85rem;"></div>
+        <div class="row" style="margin-top:16px;">
+          <button class="btn ghost" id="btnBackToDiscount">← Back</button>
+          <button class="btn primary" id="btnConfirmPay">Confirm Payment ✓</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <style>
+    .pay-method-card {
+      display:flex;align-items:center;justify-content:space-between;
+      background:var(--card-2);border:1px solid rgba(255,255,255,0.07);
+      border-radius:12px;padding:14px 16px;margin-bottom:10px;
+      cursor:pointer;transition:border-color .2s,background .2s;
+    }
+    .pay-method-card:hover { border-color: var(--accent); }
+    .pay-method-card.selected { border-color: var(--accent-2); background: rgba(251,191,36,.06); }
+    .pay-radio {
+      width:18px;height:18px;border-radius:50%;
+      border:2px solid var(--muted);flex-shrink:0;transition:all .2s;
+    }
+    .pay-method-card.selected .pay-radio { border-color:var(--accent-2);background:var(--accent-2); }
+  </style>
+
+  <script>
+    // Simple in-file data store for demo UI; replace with real API + DB in production.
+    const state = {
+      courses: [],
+      user: null,
+      otp: null,
+      otpExpiry: null,
+      selectedCourse: null
+    };
+
+    const seedCourses = () => ([
+      {
+        id: "c1",
+        title: "JEE Class 11+12",
+        price: 14999,
+        category: "JEE",
+        classLevels: ["Class 11", "Class 12", "After 12th"],
+        thumbnail: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Complete JEE prep for Class 11 and 12 with tests and strategy.",
+        instructor: "Dr. Kavya Rao",
+        syllabus: ["Physics + Chemistry + Math", "Weekly tests", "Revision plans"]
+      },
+      {
+        id: "c2",
+        title: "NEET Class 11+12",
+        price: 8999,
+        category: "NEET",
+        classLevels: ["Class 11", "Class 12", "After 12th"],
+        thumbnail: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Biology-first NEET prep with high-yield concepts.",
+        instructor: "Dr. Neha Sharma",
+        syllabus: ["Bio mastery", "NCERT focus", "Mock tests"]
+      },
+      {
+        id: "c3",
+        title: "Class 1-8 (C.B.S.E)+",
+        price: 11999,
+        category: "CBSE",
+        classLevels: ["Class 1-8"],
+        thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Strong fundamentals for CBSE Class 1-8 students.",
+        instructor: "Aditi Sen",
+        syllabus: ["Math foundations", "Science basics", "English skills"]
+      },
+      {
+        id: "c4",
+        title: "Class 10 (C.B.S.E) Special Course",
+        price: 6999,
+        category: "CBSE",
+        classLevels: ["Class 10"],
+        thumbnail: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Board-focused prep with intensive practice sets.",
+        instructor: "Rohit Bansal",
+        syllabus: ["Core subjects", "Board strategy", "Weekly mocks"]
+      },
+      {
+        id: "c5",
+        title: "Class 9 C.B.S.E",
+        price: 5999,
+        category: "CBSE",
+        classLevels: ["Class 9"],
+        thumbnail: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Bridge program for Class 9 with exam readiness.",
+        instructor: "Riya Gupta",
+        syllabus: ["Math + Science", "Language skills", "Weekly quizzes"]
+      },
+      {
+        id: "c6",
+        title: "CUET (Class 11 & 12)",
+        price: 12999,
+        category: "CUET",
+        classLevels: ["Class 11", "Class 12"],
+        thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "CUET aligned modules for key subjects and speed.",
+        instructor: "Vikas Menon",
+        syllabus: ["Core subjects", "Aptitude", "Mock tests"]
+      },
+      {
+        id: "c7",
+        title: "JEE Class 11",
+        price: 8999,
+        category: "JEE",
+        classLevels: ["Class 11"],
+        thumbnail: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Concept clarity and problem-solving for Class 11.",
+        instructor: "Ankit Joshi",
+        syllabus: ["Concept building", "Practice sets", "Tests"]
+      },
+      {
+        id: "c8",
+        title: "JEE Class 12",
+        price: 9999,
+        category: "JEE",
+        classLevels: ["Class 12"],
+        thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Advanced problems and exam strategy for Class 12.",
+        instructor: "Sonia Kulkarni",
+        syllabus: ["Advanced topics", "Mock tests", "Revision"]
+      },
+      {
+        id: "c9",
+        title: "Class 11 (C.B.S.E)",
+        price: 7999,
+        category: "CBSE",
+        classLevels: ["Class 11"],
+        thumbnail: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "CBSE Class 11 coverage with assignments.",
+        instructor: "Nikita Rao",
+        syllabus: ["Core subjects", "Assignments", "Monthly tests"]
+      },
+      {
+        id: "c10",
+        title: "Class 12 (C.B.S.E)",
+        price: 8999,
+        category: "CBSE",
+        classLevels: ["Class 12"],
+        thumbnail: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Board-focused CBSE Class 12 prep.",
+        instructor: "Kunal Verma",
+        syllabus: ["Board strategy", "Practice tests", "Revision"]
+      },
+      {
+        id: "c11",
+        title: "NEET Class 11",
+        price: 7999,
+        category: "NEET",
+        classLevels: ["Class 11"],
+        thumbnail: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Strong NEET foundation for Class 11.",
+        instructor: "Dr. Aayush Mehta",
+        syllabus: ["NCERT focus", "Problem sets", "Weekly tests"]
+      },
+      {
+        id: "c12",
+        title: "NEET Class 12",
+        price: 8999,
+        category: "NEET",
+        classLevels: ["Class 12"],
+        thumbnail: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "NEET Class 12 crash + revision modules.",
+        instructor: "Dr. Sana Khan",
+        syllabus: ["Biology intensive", "Mocks", "Revision"]
+      },
+      {
+        id: "c13",
+        title: "CA (Till Class 12)",
+        price: 6999,
+        category: "CA",
+        classLevels: ["After 12th"],
+        thumbnail: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Commerce + accounting pathway till Class 12.",
+        instructor: "Rakesh Iyer",
+        syllabus: ["Accounting basics", "Economics", "Business studies"]
+      },
+      {
+        id: "c14",
+        title: "UPSE (After 12)",
+        price: 13999,
+        category: "UPSE",
+        classLevels: ["After 12th"],
+        thumbnail: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        desc: "Foundation program for UPSE after Class 12.",
+        instructor: "Manish Chawla",
+        syllabus: ["Current affairs", "Aptitude", "Essay writing"]
+      }
+    ]);
+
+    const $ = (id) => document.getElementById(id);
+
+    const loadState = () => {
+      state.courses = JSON.parse(localStorage.getItem("courses") || "null") || seedCourses();
+      state.user = JSON.parse(localStorage.getItem("user") || "null");
+    };
+
+    const saveCourses = () => localStorage.setItem("courses", JSON.stringify(state.courses));
+    const saveUser = () => localStorage.setItem("user", JSON.stringify(state.user));
+
+    const classCategoryMap = {
+      "Class 11": [
+        "JEE Class 11+12",
+        "NEET Class 11+12",
+        "CUET (Class 11 & 12)",
+        "JEE Class 11",
+        "Class 11 (C.B.S.E)"
+      ],
+      "Class 12": [
+        "JEE Class 11+12",
+        "NEET Class 11+12",
+        "CUET (Class 11 & 12)",
+        "JEE Class 12",
+        "Class 12 (C.B.S.E)"
+      ],
+      "Class 10": ["Class 10 (C.B.S.E) Special Course"],
+      "Class 9": ["Class 9 C.B.S.E"],
+      "Class 1-8": ["Class 1-8 (C.B.S.E)+"],
+      "After 12th": [
+        "JEE Class 11+12",
+        "NEET Class 11+12",
+        "UPSE (After 12)",
+        "CA (Till Class 12)"
+      ]
+    };
+
+    const updateCategoryFilter = (classSel) => {
+      const categorySelect = $("categoryFilter");
+      const categories = classCategoryMap[classSel] || [];
+      categorySelect.innerHTML = `<option value="">Select Category</option>`;
+      categories.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        categorySelect.appendChild(opt);
+      });
+      const coursesForClass = state.courses.filter(c => (c.classLevels || []).includes(classSel));
+      const shouldHide = categories.length <= 1 || coursesForClass.length <= 1;
+      categorySelect.classList.toggle("hidden", shouldHide);
+      if (shouldHide) categorySelect.value = "";
+    };
+
+    const syncUserClassFilter = () => {
+      if (!state.user || !state.user.classLevel) return;
+      if (!$("classFilter").value) {
+        $("classFilter").value = state.user.classLevel;
+        if (state.user.classLevel !== "More") {
+          updateCategoryFilter(state.user.classLevel);
+        } else {
+          $("categoryFilter").classList.add("hidden");
+          $("categoryFilter").value = "";
+        }
+      }
+      renderCourses();
+    };
+
+    const renderCourses = () => {
+      const grid = $("courseGrid");
+      const query = $("searchInput").value.toLowerCase();
+      const classSel = $("classFilter").value;
+      const categorySel = $("categoryFilter").value;
+      grid.innerHTML = "";
+
+      if (!classSel) {
+        grid.innerHTML = `<div class="muted">Select a class to view available courses.</div>`;
+        return;
+      }
+
+      let filtered = state.courses;
+      if (classSel !== "More") {
+        filtered = filtered.filter(c => (c.classLevels || []).includes(classSel));
+      }
+      if (categorySel) {
+        filtered = filtered.filter(c => c.title === categorySel);
+      }
+      if (state.user && Array.isArray(state.user.purchases)) {
+        filtered = filtered.filter(c => !state.user.purchases.includes(c.id));
+      }
+      filtered = filtered.filter(c => c.title.toLowerCase().includes(query) || c.desc.toLowerCase().includes(query));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="muted">No courses found for this selection.</div>`;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const card = document.createElement("div");
+        card.className = "course-card";
+        card.innerHTML = `
+          <img src="${c.thumbnail}" alt="${c.title}">
+          <div class="course-body">
+            <span class="tag">${c.category}</span>
+            <h3>${c.title}</h3>
+            <p class="muted">${c.desc}</p>
+            <div class="row" style="justify-content: space-between; align-items:center;">
+              <div class="price">₹${c.price}</div>
+              <button class="btn ghost" onclick="openCourse('${c.id}')">Details</button>
+            </div>
+          </div>`;
+        grid.appendChild(card);
+      });
+    };
+
+    const renderDashboard = () => {
+      const purchasedGrid = $("purchasedGrid");
+      purchasedGrid.innerHTML = "";
+      if (!state.user) {
+        purchasedGrid.innerHTML = `<div class="muted">Login to view your courses.</div>`;
+        $("userStatus").textContent = "Not logged in";
+        return;
+      }
+      $("userStatus").textContent = `Logged in as ${state.user.mobile || state.user.email}`;
+      const purchases = state.user.purchases || [];
+      if (purchases.length === 0) {
+        purchasedGrid.innerHTML = `<div class="muted">No purchases yet. Explore the catalog.</div>`;
+        return;
+      }
+      purchases.forEach(id => {
+        const c = state.courses.find(x => x.id === id);
+        if (!c) return;
+        const card = document.createElement("div");
+        card.className = "course-card";
+        card.innerHTML = `
+          <img src="${c.thumbnail}" alt="${c.title}">
+          <div class="course-body">
+            <span class="tag">${c.category}</span>
+            <h3>${c.title}</h3>
+            <p class="muted">Instructor: ${c.instructor}</p>
+            <button class="btn primary" onclick="accessCourse('${c.id}')">Access Content</button>
+          </div>`;
+        purchasedGrid.appendChild(card);
+      });
+      renderDashboardPage();
+    };
+
+    const renderDashboardPage = () => {
+      const dashGrid = $("dashboardCourses");
+      if (!dashGrid) return;
+      dashGrid.innerHTML = "";
+      if (!state.user) return;
+      const purchases = state.user.purchases || [];
+      purchases.forEach(id => {
+        const c = state.courses.find(x => x.id === id);
+        if (!c) return;
+        const card = document.createElement("div");
+        card.className = "course-card";
+        card.innerHTML = `
+          <img src="${c.thumbnail}" alt="${c.title}">
+          <div class="course-body">
+            <span class="tag">${c.category}</span>
+            <h3>${c.title}</h3>
+            <p class="muted">${c.desc}</p>
+            <button class="btn primary" onclick="accessCourse('${c.id}')">Access Content</button>
+          </div>`;
+        dashGrid.appendChild(card);
+      });
+    };
+
+    const renderAuthUI = () => {
+      const isLoggedIn = !!state.user;
+      $("btnLogin").classList.toggle("hidden", isLoggedIn);
+      $("btnLogout").classList.toggle("hidden", !isLoggedIn);
+      $("guestVideo").classList.toggle("hidden", isLoggedIn);
+    };
+
+    const renderAdmin = () => {
+      const list = $("adminCourseList");
+      list.innerHTML = "";
+      state.courses.forEach(c => {
+        const row = document.createElement("div");
+        row.className = "panel";
+        row.style.margin = "10px 0";
+        row.innerHTML = `
+          <div class="row" style="justify-content: space-between; align-items:center;">
+            <div>
+              <strong>${c.title}</strong>
+              <div class="muted">${c.category} • ₹${c.price}</div>
+            </div>
+            <div class="row">
+              <button class="btn ghost" onclick="editCourse('${c.id}')">Edit</button>
+              <button class="btn" onclick="deleteCourse('${c.id}')">Delete</button>
+            </div>
+          </div>`;
+        list.appendChild(row);
+      });
+
+      const usersBody = $("adminUsers");
+      usersBody.innerHTML = "";
+      if (!state.user) {
+        usersBody.innerHTML = `<tr><td colspan="3" class="muted">No users yet.</td></tr>`;
+      } else {
+        usersBody.innerHTML = `
+          <tr>
+            <td>${state.user.email || "Guest User"}</td>
+            <td>${state.user.mobile || "-"}</td>
+            <td>${(state.user.purchases || []).length}</td>
+          </tr>`;
+      }
+    };
+
+    // Modal helpers
+    const toggleModal = (id, show) => {
+      $(id).style.display = show ? "flex" : "none";
+    };
+
+    // Course details
+    window.openCourse = (id) => {
+      const c = state.courses.find(x => x.id === id);
+      if (!c) return;
+      state.selectedCourse = c;
+      $("courseTitle").textContent = c.title;
+      $("courseMeta").textContent = `Instructor: ${c.instructor} • ₹${c.price} • ${c.classLevels.join(", ")}`;
+      $("courseSyllabus").innerHTML = `
+        <strong>Syllabus</strong>
+        <ul>
+          ${c.syllabus.map(s => `<li>${s}</li>`).join("")}
+        </ul>`;
+      const video = $("courseVideo");
+      video.src = c.video || "test.mp4";
+      video.pause();
+      video.currentTime = 0;
+      setTimeout(() => {
+        if (state.selectedCourse?.id === c.id) {
+          video.play().catch(() => {});
+        }
+      }, 1000);
+      $("btnVideoToggle").textContent = "Pause";
+      $("btnBuyNow").onclick = () => {
+        if (!state.user) {
+          toggleModal("courseModal", false);
+          toggleModal("loginModal", true);
+          return;
+        }
+        toggleModal("courseModal", false);
+        startPurchase(c.id);
+      };
+      toggleModal("courseModal", true);
+    };
+
+    // OTP flow (demo)
+    let otpInterval = null;
+    const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
+    const startOtpTimer = () => {
+      clearInterval(otpInterval);
+      otpInterval = setInterval(() => {
+        const remaining = Math.max(0, state.otpExpiry - Date.now());
+        const mins = Math.floor(remaining / 60000);
+        const secs = Math.floor((remaining % 60000) / 1000);
+        $("otpTimer").textContent = remaining > 0 ? `OTP expires in ${mins}:${secs.toString().padStart(2, "0")}` : "OTP expired";
+        if (remaining <= 0) clearInterval(otpInterval);
+      }, 1000);
+    };
+
+    // ── Fast2SMS config ──────────────────────────────────────────────
+    // 1. Sign up free at https://www.fast2sms.com
+    // 2. Go to Dev API → copy your API key → paste below
+    const FAST2SMS_API_KEY = "8v9uToJcY2GWsrX1fMml6bgpKOh4UnQLFkZCzjB7eEHxqDVt05dxQp7mj6cG2TBugsWnhyCSz38v14AY";
+    // ────────────────────────────────────────────────────────────────
+
+    const sendOtp = async () => {
+      const mobile = $("loginMobile").value.trim();
+      const email  = $("loginEmail").value.trim();
+
+      if (!mobile && !email) {
+        $("loginMsg").textContent = "Enter mobile number to receive OTP.";
+        return;
+      }
+
+      // Generate OTP and set expiry first
+      state.otp       = generateOtp();
+      state.otpExpiry = Date.now() + 2 * 60 * 1000;
+
+      // If no valid 10-digit mobile, fall back to showing OTP (email/demo mode)
+      if (!mobile || mobile.length < 10) {
+        $("loginMsg").textContent = `OTP (demo – no mobile): ${state.otp}`;
+        startOtpTimer();
+        return;
+      }
+
+      $("loginMsg").innerHTML = `<span class="loader"></span> Sending OTP…`;
+      $("btnSendOtp").disabled = true;
+
+      try {
+        const res = await fetch(
+          `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_API_KEY}&variables_values=${state.otp}&route=otp&numbers=${mobile}`,
+          { method: "GET" }
+        );
+        const data = await res.json();
+
+        if (data.return === true) {
+          $("loginMsg").textContent = "OTP sent to your mobile number.";
+          startOtpTimer();
+        } else {
+          // API returned an error – show OTP on screen as fallback
+          const reason = (data.message || []).join(", ") || "Unknown error";
+          $("loginMsg").textContent = `SMS failed (${reason}). OTP (fallback): ${state.otp}`;
+          startOtpTimer();
+        }
+      } catch (err) {
+        // Network / CORS error – fallback
+        $("loginMsg").textContent = `Network error. OTP (fallback): ${state.otp}`;
+        startOtpTimer();
+      } finally {
+        $("btnSendOtp").disabled = false;
+      }
+    };
+
+    const verifyOtp = () => {
+      const input = $("otpInput").value.trim();
+      if (!state.otp || Date.now() > state.otpExpiry) {
+        $("loginMsg").textContent = "OTP expired. Please resend.";
+        return;
+      }
+      if (input !== state.otp) {
+        $("loginMsg").textContent = "Invalid OTP. Try again.";
+        return;
+      }
+      const mobile = $("loginMobile").value.trim();
+      const email = $("loginEmail").value.trim();
+      const classLevel = $("loginClass").value;
+      if (!classLevel) {
+        $("loginMsg").textContent = "Please select your class.";
+        return;
+      }
+      state.user = { mobile, email, classLevel, purchases: state.user?.purchases || [] };
+      saveUser();
+      $("loginMsg").textContent = "Logged in successfully.";
+      toggleModal("loginModal", false);
+      renderDashboard();
+      renderAdmin();
+      renderAuthUI();
+      syncUserClassFilter();
+    };
+
+    const resendOtp = () => {
+      const mobile = $("loginMobile").value.trim();
+      const email  = $("loginEmail").value.trim();
+      if (!mobile && !email) {
+        $("loginMsg").textContent = "Please enter mobile number first.";
+        return;
+      }
+      sendOtp();
+    };
+
+    // ── DISCOUNT CODES — add/remove codes here anytime ────────────
+    const DISCOUNT_CODES = {
+      "lak100%": 100,   // 100% off — for teachers/staff
+      "POWER50": 50,    // 50% off
+      "WELCOME20": 20,  // 20% off for new students
+    };
+    // YOUR UPI ID — change this to your own UPI ID
+    const YOUR_UPI_ID = "yourname@upi";
+    // ────────────────────────────────────────────────────────────
+
+    let payState = { courseId: null, originalPrice: 0, finalPrice: 0, method: null };
+
+    window.startPurchase = (id) => {
+      const c = state.courses.find(x => x.id === id);
+      if (!c) return;
+      if (!state.user) { toggleModal("loginModal", true); return; }
+      payState = { courseId: c.id, originalPrice: c.price, finalPrice: c.price, method: null };
+      $("payCourseSummary").innerHTML = `<strong>${c.title}</strong><div class="muted">${c.category} · ${c.classLevels.join(", ")}</div>`;
+      $("payFinalPrice").innerHTML = `Amount to pay: <span style="color:var(--accent-2)">₹${c.price}</span>`;
+      $("discountInput").value = "";
+      $("discountMsg").textContent = "";
+      $("upiTxnInput") && ($("upiTxnInput").value = "");
+      $("payStep1").classList.remove("hidden");
+      $("payStep2").classList.add("hidden");
+      toggleModal("paymentModal", true);
+    };
+
+    $("btnApplyCode").onclick = () => {
+      const code = $("discountInput").value.trim();
+      if (!code) { $("discountMsg").textContent = "Enter a code first."; return; }
+      const pct = DISCOUNT_CODES[code];
+      if (pct === undefined) {
+        $("discountMsg").style.color = "var(--danger)";
+        $("discountMsg").textContent = "❌ Invalid code.";
+        payState.finalPrice = payState.originalPrice;
+        $("payFinalPrice").innerHTML = `Amount to pay: <span style="color:var(--accent-2)">₹${payState.originalPrice}</span>`;
+        return;
+      }
+      const discount = Math.round(payState.originalPrice * pct / 100);
+      payState.finalPrice = payState.originalPrice - discount;
+      $("discountMsg").style.color = "var(--success)";
+      $("discountMsg").textContent = `✅ Code applied! ${pct}% off — you save ₹${discount}`;
+      if (payState.finalPrice === 0) {
+        $("payFinalPrice").innerHTML = `Amount to pay: <span style="color:var(--success)">FREE ✓</span>`;
+      } else {
+        $("payFinalPrice").innerHTML = `Amount to pay: <span style="text-decoration:line-through;color:var(--muted);font-size:.9rem;">₹${payState.originalPrice}</span> → <span style="color:var(--accent-2)">₹${payState.finalPrice}</span>`;
+      }
+    };
+
+    $("btnProceedPay").onclick = () => {
+      if (payState.finalPrice === 0) {
+        completePayment(payState.courseId); return;
+      }
+      $("payStep1").classList.add("hidden");
+      $("payStep2").classList.remove("hidden");
+      const c = state.courses.find(x => x.id === payState.courseId);
+      $("payStep2Summary").textContent = `${c?.title} — ₹${payState.finalPrice}`;
+      $("upiIdDisplay").textContent = YOUR_UPI_ID;
+      $("paymentMsg").textContent = "";
+      selectPayMethod(null);
+    };
+
+    $("btnBackToDiscount").onclick = () => {
+      $("payStep2").classList.add("hidden");
+      $("payStep1").classList.remove("hidden");
+    };
+
+    window.selectPayMethod = (method) => {
+      payState.method = method;
+      ["UPI","Card","Cash"].forEach(m => {
+        $("payMethod"+m).classList.toggle("selected", method === m.toLowerCase());
+      });
+      $("upiDetails").classList.toggle("hidden", method !== "upi");
+      $("cardDetails").classList.toggle("hidden", method !== "card");
+      $("cashDetails").classList.toggle("hidden", method !== "cash");
+    };
+
+    $("btnConfirmPay").onclick = () => {
+      if (!payState.method) { $("paymentMsg").textContent = "Please select a payment method."; return; }
+      if (payState.method === "card") { $("paymentMsg").textContent = "Card payments coming soon. Please use UPI or Cash."; return; }
+      if (payState.method === "upi") {
+        const txn = $("upiTxnInput").value.trim();
+        if (!txn) { $("paymentMsg").textContent = "Please enter your UPI Transaction ID."; return; }
+      }
+      completePayment(payState.courseId);
+    };
+
+    const completePayment = (courseId) => {
+      $("paymentMsg").innerHTML = `<span class="loader"></span> Confirming...`;
+      setTimeout(() => {
+        if (!state.user.purchases.includes(courseId)) {
+          state.user.purchases.push(courseId);
+          saveUser();
+        }
+        $("paymentMsg").textContent = "";
+        toggleModal("paymentModal", false);
+        renderDashboard(); renderAdmin(); renderCourses();
+        alert("✅ Course unlocked! Go to Dashboard to access it.");
+      }, 1000);
+    };
+
+    const accessCourse = (id) => {
+      const c = state.courses.find(x => x.id === id);
+      if (!c) return;
+      alert(`Accessing ${c.title} content... (demo)`);
+    };
+
+    // Admin actions (demo)
+    const addCourse = () => {
+      const title = $("adminTitle").value.trim();
+      const price = parseInt($("adminPrice").value.trim(), 10);
+      const category = $("adminCategory").value;
+      const classLevel = $("classFilter").value || "Class 9";
+      const thumbnail = $("adminThumb").value.trim() || "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop";
+      const instructor = $("adminInstructor").value.trim() || "Staff Instructor";
+      if (!title || !price) return alert("Title and price required.");
+      const id = "c" + Math.floor(Math.random() * 10000);
+      state.courses.push({
+        id, title, price, category, thumbnail,
+        classLevels: [classLevel],
+        desc: "New course added by admin.",
+        instructor,
+        syllabus: ["Intro", "Core Modules", "Capstone"]
+      });
+      saveCourses();
+      renderCourses();
+      renderAdmin();
+    };
+
+    const deleteCourse = (id) => {
+      state.courses = state.courses.filter(c => c.id !== id);
+      saveCourses();
+      renderCourses();
+      renderAdmin();
+    };
+
+    const editCourse = (id) => {
+      const c = state.courses.find(x => x.id === id);
+      if (!c) return;
+      const newTitle = prompt("Edit title", c.title);
+      if (newTitle) c.title = newTitle;
+      saveCourses();
+      renderCourses();
+      renderAdmin();
+    };
+
+    // Tabs
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        $("tab-purchased").classList.toggle("hidden", tab.dataset.tab !== "purchased");
+        $("tab-admin").classList.toggle("hidden", tab.dataset.tab !== "admin");
+      });
+    });
+
+    // Buttons
+    $("btnLogin").onclick = () => toggleModal("loginModal", true);
+    $("btnDashboard").onclick = () => {
+      if (!state.user) {
+        toggleModal("loginModal", true);
+        return;
+      }
+      const purchases = state.user.purchases || [];
+      if (purchases.length === 0) {
+        alert("Please buy a course to open the dashboard.");
+        return;
+      }
+      $("homePage").classList.add("hidden");
+      $("dashboardPage").classList.remove("hidden");
+      document.body.classList.add("dashboard-open");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+    $("btnExplore").onclick = () => window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
+    $("btnSendOtp").onclick = sendOtp;
+    $("btnVerifyOtp").onclick = verifyOtp;
+    $("btnResendOtp").onclick = resendOtp;
+    $("btnAddCourse").onclick = addCourse;
+    $("btnSeed").onclick = () => {
+      state.courses = seedCourses();
+      saveCourses();
+      renderCourses();
+      renderAdmin();
+    };
+    $("btnLogout").onclick = () => {
+      state.user = null;
+      localStorage.removeItem("user");
+      renderDashboard();
+      renderAdmin();
+      renderAuthUI();
+      renderCourses();
+      $("dashboardPage").classList.add("hidden");
+      $("homePage").classList.remove("hidden");
+      document.body.classList.remove("dashboard-open");
+    };
+    $("searchInput").oninput = renderCourses;
+    $("categoryFilter").onchange = renderCourses;
+    $("classFilter").onchange = () => {
+      const classSel = $("classFilter").value;
+      if (classSel === "More") {
+        $("categoryFilter").classList.add("hidden");
+        $("categoryFilter").value = "";
+      } else {
+        updateCategoryFilter(classSel);
+      }
+      renderCourses();
+    };
+    $("btnGoCourses").onclick = () => {
+      window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
+    };
+    $("btnVideoToggle").onclick = () => {
+      const video = $("courseVideo");
+      if (video.paused) {
+        video.play().catch(() => {});
+        $("btnVideoToggle").textContent = "Pause";
+      } else {
+        video.pause();
+        $("btnVideoToggle").textContent = "Play";
+      }
+    };
+    $("btnExitDashboard").onclick = () => {
+      $("dashboardPage").classList.add("hidden");
+      $("homePage").classList.remove("hidden");
+      document.body.classList.remove("dashboard-open");
+      window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
+    };
+
+    // Dashboard sidebar tabs
+    document.querySelectorAll(".dash-item").forEach(item => {
+      item.addEventListener("click", () => {
+        document.querySelectorAll(".dash-item").forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+        const tab = item.dataset.tab;
+        $("dashStudy").classList.toggle("hidden", tab !== "study");
+        $("dashResources").classList.toggle("hidden", tab !== "resources");
+        $("dashLibrary").classList.toggle("hidden", tab !== "library");
+        if (tab === "resources") {
+          hideResourceFrames();
+          $("sqpFrame").classList.remove("hidden");
+        }
+      });
+    });
+
+    // Resources buttons
+    const hideResourceFrames = () => {
+      $("sqpFrame").classList.add("hidden");
+      $("pypFrame").classList.add("hidden");
+      $("cbqFrame").classList.add("hidden");
+    };
+    $("btnSQP").onclick = () => {
+      hideResourceFrames();
+      $("sqpFrame").classList.remove("hidden");
+    };
+    $("btnPYP").onclick = () => {
+      hideResourceFrames();
+      $("pypFrame").classList.remove("hidden");
+    };
+    $("btnCBQ").onclick = () => {
+      hideResourceFrames();
+      $("cbqFrame").classList.remove("hidden");
+    };
+    $("btnOthers").onclick = () => {
+      hideResourceFrames();
+    };
+    $("btnTheme").onclick = () => {
+      const root = document.documentElement;
+      const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      root.setAttribute("data-theme", next);
+      localStorage.setItem("theme", next);
+      $("btnTheme").textContent = next === "light" ? "Dark Mode" : "Light Mode";
+    };
+
+    // Init
+    loadState();
+    renderCourses();
+    renderDashboard();
+    renderAdmin();
+    renderAuthUI();
+    syncUserClassFilter();
+    const learnerEl = $("learnerCount");
+    if (learnerEl) {
+      let base = parseInt(learnerEl.textContent.replace(/[^0-9]/g, ""), 10) || 120000;
+      setInterval(() => {
+        base += Math.floor(Math.random() * 4) + 1;
+        learnerEl.textContent = base.toLocaleString();
+      }, 1500);
+    }
+    if (state.user && (state.user.purchases || []).length > 0) {
+      $("homePage").classList.add("hidden");
+      $("dashboardPage").classList.remove("hidden");
+      document.body.classList.add("dashboard-open");
+      renderDashboardPage();
+    }
+    const savedTheme = localStorage.getItem("theme") || "dark";
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    $("btnTheme").textContent = savedTheme === "light" ? "Dark Mode" : "Light Mode";
+
+    // Hero image hover swap
+    const heroImgCurrent = $("heroImageCurrent");
+    const heroImgNext = $("heroImageNext");
+    if (heroImgCurrent && heroImgNext) {
+      const slides = [
+        {
+          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/f_auto,q_auto/ChatGPT_Image_Mar_23_2026_11_43_59_AM_cjnnwn",
+          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1774289543/ChatGPT_Image_Mar_23_2026_09_43_26_AM_bk9ovk.png"
+        },
+        {
+          before: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop",
+          after: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+        },
+        {
+          before: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
+          after: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop"
+        },
+        {
+          before: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
+          after: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop"
+        }
+      ];
+
+      let currentIndex = 0;
+      let currentEl = heroImgCurrent;
+      let nextEl = heroImgNext;
+      let isAnimating = false;
+      const dots = $("heroDots");
+
+      const renderDots = () => {
+        dots.innerHTML = "";
+        slides.forEach((_, i) => {
+          const dot = document.createElement("div");
+          dot.className = "hero-dot" + (i === currentIndex ? " active" : "");
+          dot.addEventListener("click", () => {
+            const target = i;
+            if (target === currentIndex) return;
+            animateToSlide(target);
+            resetSlideTimer();
+          });
+          dots.appendChild(dot);
+        });
+      };
+
+      const setCurrentSlide = (index) => {
+        const slide = slides[index];
+        currentEl.dataset.original = slide.before;
+        currentEl.dataset.hover = slide.after;
+        currentEl.src = slide.before;
+        renderDots();
+      };
+
+      const animateToSlide = (nextIndex) => {
+        if (isAnimating) return;
+        isAnimating = true;
+        const nextSlide = slides[nextIndex];
+        nextEl.classList.add("no-transition");
+        nextEl.src = nextSlide.before;
+        nextEl.classList.remove("slide-animate-in", "slide-animate-out");
+        nextEl.classList.add("slide-next");
+        nextEl.style.zIndex = "3";
+        currentEl.style.zIndex = "2";
+        nextEl.getBoundingClientRect();
+        nextEl.classList.remove("no-transition");
+
+        currentEl.classList.remove("slide-next", "slide-animate-in");
+        currentEl.classList.add("slide-current");
+
+        requestAnimationFrame(() => {
+          currentEl.classList.add("slide-animate-out");
+          nextEl.classList.add("slide-animate-in");
+        });
+
+        const onDone = () => {
+          currentEl.classList.remove("slide-animate-out", "slide-current");
+          nextEl.classList.remove("slide-animate-in", "slide-next");
+          const temp = currentEl;
+          currentEl = nextEl;
+          nextEl = temp;
+          currentEl.classList.add("slide-current");
+          nextEl.classList.add("slide-next");
+          currentEl.style.zIndex = "2";
+          nextEl.style.zIndex = "1";
+          currentIndex = nextIndex;
+          setCurrentSlide(currentIndex);
+          isAnimating = false;
+        };
+        nextEl.addEventListener("transitionend", onDone, { once: true });
+      };
+
+      let slideTimer = null;
+      const resetSlideTimer = () => {
+        if (slideTimer) clearInterval(slideTimer);
+        slideTimer = setInterval(() => {
+          const nextIndex = (currentIndex + 1) % slides.length;
+          animateToSlide(nextIndex);
+        }, 3000);
+      };
+
+      currentEl.classList.add("slide-current");
+      nextEl.classList.add("slide-next");
+      currentEl.style.zIndex = "2";
+      nextEl.style.zIndex = "1";
+      setCurrentSlide(0);
+
+      nextEl.src = slides[1].before;
+      resetSlideTimer();
+
+      const preload = slides.map(s => s.before);
+      preload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+      });
+    }
+  </script>
+</body>
+</html>

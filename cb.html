@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competency Based Questions PDFs</title>
+  <style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(#f5f7fa,#e4ecf5);
+    padding: 20px;
+    margin: 0;
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem; /* slightly bigger */
+  }
+
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .subject-column {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1 1 250px;
+    max-width: 280px; /* smaller max width */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    cursor: grab;
+  }
+  .subject-column.dragging{
+    opacity:0.6;
+    cursor: grabbing;
+  }
+
+  .subject-column:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+  }
+
+  .subject-column h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.5rem; /* bigger text */
+  }
+
+  .subject-column a {
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-size: 1.1rem; /* bigger links */
+    background: white;
+    border-radius: 25px;
+    padding: 6px 12px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 8px rgba(0,0,0,0.12);
+    word-wrap: break-word;
+  }
+
+  .subject-column a:hover {
+    text-decoration: underline;
+  }
+
+  .subject-column:nth-child(odd){
+    border:2px solid #ff2d55;
+    box-shadow:0 0 12px rgba(255,45,85,0.25);
+  }
+  .subject-column:nth-child(odd) a{
+    border:1px solid #ff2d55;
+    color:#ff2d55;
+    box-shadow:0 0 8px #ff2d55;
+  }
+  .subject-column:nth-child(odd) a:hover{
+    background:#ff2d55;
+    color:white;
+    text-decoration:none;
+  }
+  .subject-column:nth-child(even){
+    border:2px solid #00eaff;
+    box-shadow:0 0 12px rgba(0,234,255,0.25);
+  }
+  .subject-column:nth-child(even) a{
+    border:1px solid #00eaff;
+    color:#00eaff;
+    box-shadow:0 0 8px #00eaff;
+  }
+  .subject-column:nth-child(even) a:hover{
+    background:#00eaff;
+    color:black;
+    text-decoration:none;
+  }
+
+  .toggle-btn{
+    position:fixed;
+    top:20px;
+    left:20px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:none;
+    font-weight:600;
+    cursor:pointer;
+    background:#111;
+    color:#fff;
+    z-index:1000;
+  }
+
+  body.dark-mode{
+    background:radial-gradient(circle at top,#0f2027,#0a0f1f 60%,#000814);
+    color:white;
+  }
+  body.dark-mode h1{
+    color:#00eaff;
+    text-shadow:0 0 10px #00eaff;
+  }
+  body.dark-mode .toggle-btn{
+    background:#fff;
+    color:#111;
+  }
+  body.dark-mode .subject-column{
+    background-color:rgba(255,255,255,0.05);
+  }
+  body.dark-mode .subject-column a{
+    background:transparent;
+  }
+  body.dark-mode .subject-column h2{
+    color:#ffffff;
+  }
+  body.dark-mode .subject-column a{
+    color:#ffffff;
+  }
+
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .subject-column {
+      width: 90%;
+      max-width: 300px; /* reduced from 100% */
+    }
+  }
+</style>
+
+</head>
+<body>
+<button class="toggle-btn" id="themeBtn" onclick="toggleMode()">Dark Mode</button>
+
+<h1>Subject-wise PDF Links</h1>
+
+<div class="container">
+  <!-- Physics Column -->
+  <div class="subject-column" style="background-image:url('https://i.ibb.co/9mxYJHcY/physics.jpg')">
+    <h2>Physics</h2>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Physics_G12_Vol1_2023.pdf" target="_blank">Physics PDF 1</a>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Physics_12Vol2.pdf" target="_blank">Physics PDF 2</a>
+  </div>
+
+  <!-- Chemistry Column -->
+  <div class="subject-column" style="background-image:url('https://i.ibb.co/cXtV2zXT/chemistry.jpg')">
+    <h2>Chemistry</h2>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Chemistry_G12_Vol1_2023.pdf" target="_blank">Chemistry PDF 1</a>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Chemistry_12Vol2.pdf" target="_blank">Chemistry PDF 2</a>
+  </div>
+
+  <!-- Maths Column -->
+  <div class="subject-column" style="background-image:url('https://i.ibb.co/yFbby1WP/maths.jpg')">
+    <h2>Maths</h2>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Math_Grade12_V1.pdf" target="_blank">Maths PDF 1</a>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/Mathematics_12Vol2.pdf" target="_blank">Maths PDF 2</a>
+  </div>
+
+  <!-- English Column -->
+  <div class="subject-column" style="background-image:url('https://i.ibb.co/NnkWFmkf/english.jpg')">
+    <h2>English</h2>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/PQ_EnglishCore12.pdf" target="_blank">English PDF 1</a>
+    <a href="https://cbseacademic.nic.in/web_material/Manuals/English_12Vol2.pdf" target="_blank">English PDF 2</a>
+  </div>
+</div>
+
+<script>
+  const applyTheme = (theme) => {
+    document.body.classList.toggle("dark-mode", theme === "dark");
+    const btn = document.getElementById("themeBtn");
+    if (btn) btn.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+  };
+
+  const getTheme = () => localStorage.getItem("theme") || "dark";
+
+  function toggleMode() {
+    const next = getTheme() === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
+    applyTheme(next);
+  }
+
+  applyTheme(getTheme());
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "theme") applyTheme(e.newValue || "dark");
+  });
+
+  // Drag and drop reorder within this section
+  const container = document.querySelector(".container");
+  const cards = document.querySelectorAll(".subject-column");
+
+  cards.forEach(card => {
+    card.setAttribute("draggable", "true");
+    card.addEventListener("dragstart", () => {
+      card.classList.add("dragging");
+    });
+    card.addEventListener("dragend", () => {
+      card.classList.remove("dragging");
+    });
+  });
+
+  if (container) {
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const dragging = document.querySelector(".dragging");
+      if (!dragging) return;
+      const target = e.target.closest(".subject-column");
+      if (!target || target === dragging || !container.contains(target)) return;
+      const rect = target.getBoundingClientRect();
+      const isAfter = (e.clientY > rect.top + rect.height / 2) || (e.clientX > rect.left + rect.width / 2);
+      if (isAfter) {
+        container.insertBefore(dragging, target.nextSibling);
+      } else {
+        container.insertBefore(dragging, target);
+      }
+    });
+  }
+</script>
+</body>
+</html>

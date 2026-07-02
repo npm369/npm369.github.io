@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class XII Subject Sample Papers</title>
+
+<style>
+
+/* ================= RESET ================= */
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition:all 0.4s ease;
+  background:linear-gradient(#f5f7fa,#e4ecf5);
+  color:#111;
+}
+
+/* ================= TOGGLE BUTTON ================= */
+
+.toggle-btn{
+  position:fixed;
+  top:20px;
+  left:20px;
+  padding:10px 22px;
+  border-radius:30px;
+  border:none;
+  font-weight:600;
+  cursor:pointer;
+  z-index:1000;
+
+  background:#111;
+  color:white;
+
+  box-shadow:
+    0 0 10px rgba(0,0,0,0.4),
+    0 0 20px rgba(0,150,255,0.6);
+
+  transition:all 0.3s ease;
+}
+
+.toggle-btn:hover{
+  transform:scale(1.08);
+  box-shadow:
+    0 0 20px rgba(0,150,255,0.9),
+    0 0 40px rgba(0,150,255,0.7);
+}
+/* ================= TITLE ================= */
+
+h1{
+  text-align:center;
+  padding:80px 20px 40px;
+  font-weight:600;
+}
+
+/* ================= GRID ================= */
+
+.container{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:30px;
+  padding:40px;
+}
+
+/* ================= GLASS CARD (LIGHT MODE) ================= */
+
+.window{
+  position:relative;
+  height:230px;
+  border-radius:25px;
+  overflow:hidden;
+
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  backdrop-filter:blur(8px);
+  background-color:rgba(255,255,255,0.4);
+  border:1px solid rgba(255,255,255,0.6);
+
+  box-shadow:0 15px 35px rgba(0,0,0,0.15);
+  transition:0.4s ease;
+  cursor: grab;
+}
+.window.dragging{
+  opacity:0.6;
+  cursor: grabbing;
+}
+/* ================= LIGHT MODE GLOW ================= */
+
+/* BLUE GLOW */
+.window.blue{
+  border:2px solid #00bfff;
+  box-shadow:
+    0 0 12px rgba(0,191,255,0.6),
+    0 0 25px rgba(0,191,255,0.3);
+}
+
+/* RED GLOW */
+.window.red{
+  border:2px solid #ff4d6d;
+  box-shadow:
+    0 0 12px rgba(255,77,109,0.6),
+    0 0 25px rgba(255,77,109,0.3);
+}
+
+.window:hover{
+  transform:translateY(-6px);
+}
+
+.window::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.1);
+}
+
+.content{
+  position:relative;
+  z-index:2;
+  padding:20px;
+  color:white;
+}
+
+.links{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.links a{
+  text-decoration:none;
+  padding:6px 14px;
+  border-radius:25px;
+  font-size:13px;
+  font-weight:600;
+  width:fit-content;
+  background:white;
+  color:black;
+  transition:0.3s;
+}
+
+.links a:hover{
+  transform:scale(1.08);
+}
+/* BLUE BUTTON */
+.window.blue .links a{
+  border:1px solid #00eaff;
+  color:#00eaff;
+  box-shadow:0 0 8px #00eaff;
+}
+.window.blue .links a:hover{
+  background:#00eaff;
+  color:black;
+}
+
+/* RED BUTTON */
+.window.red .links a{
+  border:1px solid #ff2d55;
+  color:#ff2d55;
+  box-shadow:0 0 8px #ff2d55;
+}
+
+.window.red .links a:hover{
+  background:#ff2d55;
+  color:white;
+}
+/* ================= DARK MODE ================= */
+
+body.dark-mode{
+  background:radial-gradient(circle at top,#0f2027,#0a0f1f 60%,#000814);
+  color:white;
+}
+
+body.dark-mode h1{
+  color:#00eaff;
+  text-shadow:0 0 10px #00eaff;
+}
+
+body.dark-mode .toggle-btn{
+  background:white;
+  color:black;
+}
+
+body.dark-mode .window{
+  background-color:rgba(255,255,255,0.05);
+  border:2px solid transparent;
+  box-shadow:none;
+}
+
+/* BLUE GLOW */
+body.dark-mode .window.blue{
+  border-color:#00eaff;
+  box-shadow:0 0 15px #00eaff,0 0 40px rgba(0,234,255,0.4);
+}
+
+/* RED GLOW */
+body.dark-mode .window.red{
+  border-color:#ff2d55;
+  box-shadow:0 0 15px #ff2d55,0 0 40px rgba(255,45,85,0.4);
+}
+
+body.dark-mode .window:hover{
+  transform:translateY(-8px) scale(1.02);
+}
+
+body.dark-mode .links a{
+  background:transparent;
+}
+
+/* BLUE BUTTON */
+body.dark-mode .window.blue .links a{
+  border:1px solid #00eaff;
+  color:#00eaff;
+  box-shadow:0 0 8px #00eaff;
+}
+
+body.dark-mode .window.blue .links a:hover{
+  background:#00eaff;
+  color:black;
+}
+
+/* RED BUTTON */
+body.dark-mode .window.red .links a{
+  border:1px solid #ff2d55;
+  color:#ff2d55;
+  box-shadow:0 0 8px #ff2d55;
+}
+
+body.dark-mode .window.red .links a:hover{
+  background:#ff2d55;
+  color:white;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+  .container{
+    grid-template-columns:1fr;
+  }
+}
+
+</style>
+</head>
+<body>
+<button class="toggle-btn" id="themeBtn" onclick="toggleMode()">Dark Mode</button>
+<h1>Class XII Subject Sample Papers</h1>
+<div class="container">
+
+<!-- Maths -->
+<div class="window red" style="background-image:url('https://i.ibb.co/yFbby1WP/maths.jpg')">
+  <div class="content">
+    <h2>Maths</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Maths-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/Maths-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/Maths-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/Maths-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- English -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/NnkWFmkf/english.jpg')">
+  <div class="content">
+    <h2>English</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/EnglishCore-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/EnglishCore-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/EnglishCore-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/EnglishCore-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Chemistry -->
+<div class="window red" style="background-image:url('https://i.ibb.co/cXtV2zXT/chemistry.jpg')">
+  <div class="content">
+    <h2>Chemistry</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Chemistry-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/Chemistry-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/Chemistry-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/Chemistry-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Physics -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/9mxYJHcY/physics.jpg')">
+  <div class="content">
+    <h2>Physics</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Physics-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/Physics-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/Physics-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/Physics-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Computer -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/B2x9WMhM/computer.jpg')">
+  <div class="content">
+    <h2>Computer</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/ComputerScience-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/ComputerScience-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/ComputerScience-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/ComputerScience-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- PE -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/3YcKSGjG/pe.jpg')">
+  <div class="content">
+    <h2>P.E</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/PhysicalEducation-SQP.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/PhysicalEducation-SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/PhysicalEducation-SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/PhysicalEducation-SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+</div>
+<div class="bottom-section">
+<hr class="section-line">
+<h1>Class XII Subject Sample Papers(MS)</h1>
+<div class="container">
+<!-- Maths -->
+<div class="window red" style="background-image:url('https://i.ibb.co/yFbby1WP/maths.jpg')">
+  <div class="content">
+    <h2>Maths</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Maths-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/Maths-MS.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/Maths-MS.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/Maths-MS.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- English -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/NnkWFmkf/english.jpg')">
+  <div class="content">
+    <h2>English</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/EnglishCore-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/EnglishCore-MS.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/EnglishCore-MS.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/EnglishCore-MS.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Chemistry -->
+<div class="window red" style="background-image:url('https://i.ibb.co/cXtV2zXT/chemistry.jpg')">
+  <div class="content">
+    <h2>Chemistry</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Chemistry-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/Chemistry-MS.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/Chemistry-MS.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/Chemistry-MS.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Physics -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/9mxYJHcY/physics.jpg')">
+  <div class="content">
+    <h2>Physics</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/Physics-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- Computer -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/B2x9WMhM/computer.jpg')">
+  <div class="content">
+    <h2>Computer</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/ComputerScience-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2024_25/ComputerScience-MS.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2023_24/ComputerScience-MS.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2022_23/ComputerScience-MS.pdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+
+<!-- PE -->
+<div class="window blue" style="background-image:url('https://i.ibb.co/3YcKSGjG/pe.jpg')">
+  <div class="content">
+    <h2>P.E</h2>
+    <div class="links">
+      <a href="https://cbseacademic.nic.in/web_material/SQP/ClassXII_2025_26/PhyscalEducation-MS.pdf"target="_blank">2025-26</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP.pdf"target="_blank">2024-25</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQP.pdf"target="_blank">2023-24</a>
+      <a href="https://cbseacademic.nic.in/web_material/SQPpdf"target="_blank">2022-23</a>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  const applyTheme = (theme) => {
+    document.body.classList.toggle("dark-mode", theme === "dark");
+    const btn = document.getElementById("themeBtn");
+    if (btn) btn.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+  };
+
+  const getTheme = () => localStorage.getItem("theme") || "dark";
+
+  function toggleMode() {
+    const next = getTheme() === "dark" ? "light" : "dark";
+    localStorage.setItem("theme", next);
+    applyTheme(next);
+  }
+
+  applyTheme(getTheme());
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === "theme") applyTheme(e.newValue || "dark");
+  });
+
+  // Drag and drop reorder within each section only
+  const containers = document.querySelectorAll(".container");
+  const cards = document.querySelectorAll(".window");
+
+  cards.forEach(card => {
+    card.setAttribute("draggable", "true");
+    card.addEventListener("dragstart", () => {
+      card.classList.add("dragging");
+    });
+    card.addEventListener("dragend", () => {
+      card.classList.remove("dragging");
+    });
+  });
+
+  containers.forEach(container => {
+    container.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const dragging = document.querySelector(".dragging");
+      if (!dragging) return;
+      const target = e.target.closest(".window");
+      if (!target || target === dragging || !container.contains(target)) return;
+      const rect = target.getBoundingClientRect();
+      const isAfter = (e.clientY > rect.top + rect.height / 2) || (e.clientX > rect.left + rect.width / 2);
+      if (isAfter) {
+        container.insertBefore(dragging, target.nextSibling);
+      } else {
+        container.insertBefore(dragging, target);
+      }
+    });
+  });
+</script>
+</body>
+</html>
+
