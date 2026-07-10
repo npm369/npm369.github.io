@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PowerMind — Premium Courses</title>
+  <title>PowerMind — Courses</title>
   <style>
     :root {
       --bg: #0b0f1a;
@@ -110,6 +110,34 @@
       box-shadow: 0 8px 25px rgba(34, 211, 238, 0.35);
     }
     .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .profile-shell{position:relative}
+    .profile-btn{
+      display:flex;align-items:center;gap:10px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(15,23,42,.78);
+      color:var(--text);
+      padding:7px 10px;border-radius:999px;cursor:pointer;
+      font-weight:700;
+    }
+    .profile-avatar{
+      width:32px;height:32px;border-radius:50%;
+      object-fit:cover;background:linear-gradient(135deg,var(--accent),var(--accent-3));
+      display:grid;place-items:center;color:#0b0f1a;font-weight:900;
+    }
+    .profile-menu{
+      position:absolute;right:0;top:calc(100% + 10px);
+      width:280px;background:#0e1628;border:1px solid rgba(255,255,255,.1);
+      border-radius:16px;box-shadow:var(--shadow);padding:14px;z-index:30;
+    }
+    .profile-head{display:flex;gap:12px;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:12px;margin-bottom:12px}
+    .profile-head .profile-avatar{width:46px;height:46px}
+    .profile-name{font-weight:800}
+    .profile-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+    .profile-action{
+      width:100%;text-align:left;border:0;background:transparent;color:var(--text);
+      padding:10px;border-radius:10px;cursor:pointer;font-weight:650;
+    }
+    .profile-action:hover{background:rgba(255,255,255,.06)}
     .btn {
       border: none;
       background: #1f2a44;
@@ -155,15 +183,18 @@
     .hero-frame {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
+      aspect-ratio: 4 / 5;
+      max-height: 560px;
+      background: #05080f;
+      border-radius: 12px;
     }
     .hero-frame img {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transition: transform 0.8s ease;
+      object-fit: contain;
+      transition: opacity 0.45s ease;
       border-radius: 12px;
       z-index: 1;
     }
@@ -171,21 +202,17 @@
       transition: none !important;
     }
     .slide-current {
-      transform: translateX(0);
       opacity: 1;
       z-index: 2;
     }
     .slide-next {
-      transform: translateX(100%);
-      opacity: 1;
+      opacity: 0;
       z-index: 1;
     }
     .slide-animate-out {
-      transform: translateX(-100%);
-      opacity: 1;
+      opacity: 0;
     }
     .slide-animate-in {
-      transform: translateX(0);
       opacity: 1;
     }
     .hero-dots {
@@ -447,7 +474,7 @@
       .hero-metrics { grid-template-columns: 1fr; }
       .filters { flex-direction: column; }
       .input, select { width: 100%; min-width: 0; }
-      .hero-frame { aspect-ratio: 4 / 3; }
+      .hero-frame { aspect-ratio: 4 / 5; max-height: 520px; }
       .dash-layout { grid-template-columns: 1fr; }
       .dashboard-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
       .resource-cards { grid-template-columns: repeat(2, 1fr); }
@@ -465,8 +492,24 @@
       <div class="nav-actions">
         <button class="btn ghost" id="btnTheme">Light Mode</button>
         <button class="btn ghost" id="btnGoCourses">Courses</button>
-        <button class="btn ghost" id="btnLogin">Login via OTP</button>
-        <button class="btn ghost hidden" id="btnLogout">Logout</button>
+        <button class="btn ghost" id="btnLogin">Login</button>
+        <div class="profile-shell hidden" id="profileShell">
+          <button class="profile-btn" id="btnProfile" type="button">
+            <span class="profile-avatar" id="profileAvatar">P</span>
+            <span id="profileButtonName">Profile</span>
+          </button>
+          <div class="profile-menu hidden" id="profileMenu">
+            <div class="profile-head">
+              <span class="profile-avatar" id="profileMenuAvatar">P</span>
+              <div>
+                <div class="profile-name" id="profileMenuName">Student</div>
+                <div class="profile-sub" id="profileMenuDetails">DOB: -<br>Email: -</div>
+              </div>
+            </div>
+            <button class="profile-action" id="btnSettings" type="button">Settings</button>
+            <button class="profile-action" id="btnLogout" type="button">Logout</button>
+          </div>
+        </div>
         <button class="btn primary" id="btnDashboard">Dashboard</button>
       </div>
     </div>
@@ -475,8 +518,8 @@
   <main class="container" id="homePage">
     <section class="hero">
       <div>
-        <h1>learn from premium courses with enterprise-grade experience.</h1>
-        <p>Modern learning platform with OTP authentication, secure checkout, and a stunning catalog designed to convert casual visitors into active learners.</p>
+        <h1>learn from courses with enterprise-grade experience.</h1>
+        <p>Modern learning platform with verified student accounts, secure checkout, and a stunning catalog designed to convert casual visitors into active learners.</p>
         <div class="row" style="margin-top:16px;">
           <button class="btn primary" id="btnExplore">Explore Courses</button>
           <button class="btn ghost" id="btnBecome">Become an Instructor</button>
@@ -539,13 +582,16 @@
       <div class="filters">
         <select id="classFilter">
           <option value="">Select Class</option>
-          <option value="Class 11">Class 11</option>
-          <option value="Class 12">Class 12</option>
-          <option value="Class 10">Class 10</option>
-          <option value="Class 9">Class 9</option>
-          <option value="Class 1-8">Class 1-8</option>
-          <option value="After 12th">After 12th</option>
-          <option value="More">More...</option>
+          <optgroup label="School & Exam Courses">
+            <option value="Class 11">Class 11</option>
+            <option value="Class 12">Class 12</option>
+            <option value="Class 10">Class 10</option>
+            <option value="Class 9">Class 9</option>
+            <option value="Class 1-8">Class 1-8</option>
+            <option value="After 12th">After 12th</option>
+            <option value="More">More...</option>
+          </optgroup>
+          <option value="Languages">Language Courses</option>
         </select>
         <select id="categoryFilter" class="hidden">
           <option value="">Select Category</option>
@@ -582,6 +628,7 @@
               <option value="CUET">CUET</option>
               <option value="CA">CA</option>
               <option value="UPSE">UPSE</option>
+              <option value="Language">Language</option>
             </select>
           </div>
           <div class="row">
@@ -597,7 +644,7 @@
           <h4 style="margin-top:18px;">Users & Purchases</h4>
           <table>
             <thead>
-              <tr><th>User</th><th>Mobile</th><th>Purchases</th></tr>
+              <tr><th>User</th><th>Email</th><th>Purchases</th></tr>
             </thead>
             <tbody id="adminUsers"></tbody>
           </table>
@@ -663,45 +710,105 @@
     <div class="brand-mark"></div>
           PowerMind
         </div>
-        <div class="muted">Secure OTP login - Payments via Razorpay - Production-ready UI</div>
+        <div class="muted">Secure email verification - Payments via Razorpay - Production-ready UI</div>
       </div>
       <div class="muted">(c) 2026 PowerMind. All rights reserved.</div>
     </div>
   </footer>
 
-  <!-- Login Modal -->
+  <!-- Account Modal: adds email/password signup and login without social auth. -->
   <div class="backdrop" id="loginModal">
     <div class="modal">
-      <h3>Login with OTP</h3>
-      <p class="muted">Use mobile number or email. OTP expires in 2 minutes.</p>
+      <h3>Student Account</h3>
+      <p class="muted">Create an account with email verification, or sign in with your verified email.</p>
+      <h4 style="margin-bottom:8px;">Create Account</h4>
       <div class="row">
-        <input class="input" id="loginMobile" placeholder="Mobile number" />
-        <input class="input" id="loginEmail" placeholder="Email (optional)" />
+        <input class="input" id="signupName" placeholder="Full name" autocomplete="name" />
+        <input class="input" id="signupDob" type="date" title="Date of birth" />
+      </div>
+      <div class="row">
+        <input class="input" id="signupEmail" type="email" placeholder="Email address" autocomplete="email" />
+        <input class="input" id="signupPassword" type="password" placeholder="Password" autocomplete="new-password" />
       </div>
       <div class="row" style="margin-top:12px;">
-        <select id="loginClass" class="input">
+        <input class="input" id="signupPhoto" placeholder="Photo URL (optional)" />
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <select id="signupClass" class="input">
           <option value="">Select Class</option>
-          <option value="Class 11">Class 11</option>
-          <option value="Class 12">Class 12</option>
-          <option value="Class 10">Class 10</option>
-          <option value="Class 9">Class 9</option>
-          <option value="Class 1-8">Class 1-8</option>
-          <option value="After 12th">After 12th</option>
-          <option value="More">More...</option>
+          <optgroup label="School & Exam Courses">
+            <option value="Class 11">Class 11</option>
+            <option value="Class 12">Class 12</option>
+            <option value="Class 10">Class 10</option>
+            <option value="Class 9">Class 9</option>
+            <option value="Class 1-8">Class 1-8</option>
+            <option value="After 12th">After 12th</option>
+            <option value="More">More...</option>
+          </optgroup>
+          <option value="Languages">Language Courses</option>
         </select>
       </div>
       <div class="row" style="margin-top:12px;">
-        <button class="btn primary" id="btnSendOtp">Send OTP</button>
-        <div id="otpTimer" class="muted"></div>
+        <button class="btn primary" id="btnCreateAccount">Create Account</button>
       </div>
+      <hr style="border:0;border-top:1px solid rgba(255,255,255,.08);margin:18px 0;">
+      <h4 style="margin-bottom:8px;">Sign In</h4>
       <div class="row" style="margin-top:12px;">
-        <input class="input" id="otpInput" placeholder="Enter OTP" />
-        <button class="btn ghost" id="btnVerifyOtp">Verify</button>
-        <button class="btn ghost" id="btnResendOtp">Resend OTP</button>
+        <input class="input" id="signinEmail" type="email" placeholder="Email address" autocomplete="email" />
+        <input class="input" id="signinPassword" type="password" placeholder="Password" autocomplete="current-password" />
+        <button class="btn ghost" id="btnSignIn">Login</button>
       </div>
       <div id="loginMsg" class="muted" style="margin-top:10px;"></div>
       <div class="row" style="margin-top:10px;">
         <button class="btn" onclick="toggleModal('loginModal', false)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Email Verification Modal: users cannot reach the dashboard until this succeeds. -->
+  <div class="backdrop" id="verificationModal">
+    <div class="modal">
+      <h3>Email Verification</h3>
+      <p class="muted">Enter the 6-digit verification code sent to your email.</p>
+      <div class="otp-boxes" id="otpBoxes">
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+        <input class="input otp-box" inputmode="numeric" maxlength="1" />
+      </div>
+      <div class="row" style="margin-top:12px;align-items:center;">
+        <button class="btn primary" id="btnVerifyEmail">Verify</button>
+        <button class="btn ghost" id="btnResendVerification" disabled>Resend OTP</button>
+        <div id="verificationTimer" class="muted"></div>
+      </div>
+      <div id="verificationMsg" class="muted" style="margin-top:10px;"></div>
+      <div class="row" style="margin-top:10px;">
+        <button class="btn" onclick="toggleModal('verificationModal', false)">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Settings Modal -->
+  <div class="backdrop" id="settingsModal">
+    <div class="modal">
+      <div class="row" style="justify-content:space-between;align-items:center;">
+        <h3 style="margin:0;">Profile Settings</h3>
+        <button class="btn ghost" id="btnEditSettings" type="button">Edit</button>
+      </div>
+      <p class="muted">View your original information. Click Edit to update it.</p>
+      <div class="row">
+        <input class="input" id="settingsName" placeholder="Full name" />
+        <input class="input" id="settingsDob" type="date" title="Date of birth" />
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <input class="input" id="settingsEmail" placeholder="Email" />
+        <input class="input" id="settingsPhoto" placeholder="Photo URL" />
+      </div>
+      <div class="row" style="margin-top:12px;">
+        <button class="btn primary hidden" id="btnSaveSettings">Save</button>
+        <button class="btn" onclick="toggleModal('settingsModal', false)">Close</button>
       </div>
     </div>
   </div>
@@ -802,7 +909,7 @@
             <span class="muted">• Centre 1: 12, Sector 18, Noida, UP<br>
             • Centre 2: 45, Rajouri Garden, New Delhi<br>
             • Timings: Mon–Sat, 9 AM – 7 PM</span><br><br>
-            Mention your registered mobile number and course name at the counter.
+            Mention your registered email address and course name at the counter.
           </div>
         </div>
 
@@ -830,6 +937,22 @@
       border:2px solid var(--muted);flex-shrink:0;transition:all .2s;
     }
     .pay-method-card.selected .pay-radio { border-color:var(--accent-2);background:var(--accent-2); }
+
+    /* Email verification: reuses the existing modal/input/button design language. */
+    .otp-boxes {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .otp-box {
+      min-width: 0;
+      height: 54px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      padding: 0;
+    }
   </style>
 
   <script>
@@ -837,9 +960,33 @@
     const state = {
       courses: [],
       user: null,
-      otp: null,
-      otpExpiry: null,
+      pendingVerificationEmail: "",
       selectedCourse: null
+    };
+
+    const APP_CONFIG = {
+      // For GitHub Pages, set this to your deployed Node backend URL.
+      apiBaseUrl: "",
+      localFallback: true
+    };
+
+    const apiUrl = (path) => `${APP_CONFIG.apiBaseUrl}${path}`;
+    const apiPost = async (path, payload) => {
+      const res = await fetch(apiUrl(path), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `Request failed: ${path}`);
+      return data;
+    };
+
+    const apiGet = async (path) => {
+      const res = await fetch(apiUrl(path));
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `Request failed: ${path}`);
+      return data;
     };
 
     const seedCourses = () => ([
@@ -851,6 +998,7 @@
         classLevels: ["Class 11", "Class 12", "After 12th"],
         thumbnail: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "jee.html",
         desc: "Complete JEE prep for Class 11 and 12 with tests and strategy.",
         instructor: "Dr. Kavya Rao",
         syllabus: ["Physics + Chemistry + Math", "Weekly tests", "Revision plans"]
@@ -863,6 +1011,7 @@
         classLevels: ["Class 11", "Class 12", "After 12th"],
         thumbnail: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "neet.html",
         desc: "Biology-first NEET prep with high-yield concepts.",
         instructor: "Dr. Neha Sharma",
         syllabus: ["Bio mastery", "NCERT focus", "Mock tests"]
@@ -875,6 +1024,7 @@
         classLevels: ["Class 1-8"],
         thumbnail: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "class1_8.html",
         desc: "Strong fundamentals for CBSE Class 1-8 students.",
         instructor: "Aditi Sen",
         syllabus: ["Math foundations", "Science basics", "English skills"]
@@ -887,6 +1037,7 @@
         classLevels: ["Class 10"],
         thumbnail: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "class10.html",
         desc: "Board-focused prep with intensive practice sets.",
         instructor: "Rohit Bansal",
         syllabus: ["Core subjects", "Board strategy", "Weekly mocks"]
@@ -899,6 +1050,7 @@
         classLevels: ["Class 9"],
         thumbnail: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "class9.html",
         desc: "Bridge program for Class 9 with exam readiness.",
         instructor: "Riya Gupta",
         syllabus: ["Math + Science", "Language skills", "Weekly quizzes"]
@@ -911,6 +1063,7 @@
         classLevels: ["Class 11", "Class 12"],
         thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "cuet.html",
         desc: "CUET aligned modules for key subjects and speed.",
         instructor: "Vikas Menon",
         syllabus: ["Core subjects", "Aptitude", "Mock tests"]
@@ -923,6 +1076,7 @@
         classLevels: ["Class 11"],
         thumbnail: "https://images.unsplash.com/photo-1519452575417-564c1401ecc0?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "jee_class11.html",
         desc: "Concept clarity and problem-solving for Class 11.",
         instructor: "Ankit Joshi",
         syllabus: ["Concept building", "Practice sets", "Tests"]
@@ -935,6 +1089,7 @@
         classLevels: ["Class 12"],
         thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "jee_class12.html",
         desc: "Advanced problems and exam strategy for Class 12.",
         instructor: "Sonia Kulkarni",
         syllabus: ["Advanced topics", "Mock tests", "Revision"]
@@ -947,6 +1102,7 @@
         classLevels: ["Class 11"],
         thumbnail: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "class11.html",
         desc: "CBSE Class 11 coverage with assignments.",
         instructor: "Nikita Rao",
         syllabus: ["Core subjects", "Assignments", "Monthly tests"]
@@ -959,6 +1115,7 @@
         classLevels: ["Class 12"],
         thumbnail: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "class12.html",
         desc: "Board-focused CBSE Class 12 prep.",
         instructor: "Kunal Verma",
         syllabus: ["Board strategy", "Practice tests", "Revision"]
@@ -971,6 +1128,7 @@
         classLevels: ["Class 11"],
         thumbnail: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "neet_class11.html",
         desc: "Strong NEET foundation for Class 11.",
         instructor: "Dr. Aayush Mehta",
         syllabus: ["NCERT focus", "Problem sets", "Weekly tests"]
@@ -983,6 +1141,7 @@
         classLevels: ["Class 12"],
         thumbnail: "https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "neet_class12.html",
         desc: "NEET Class 12 crash + revision modules.",
         instructor: "Dr. Sana Khan",
         syllabus: ["Biology intensive", "Mocks", "Revision"]
@@ -995,6 +1154,7 @@
         classLevels: ["After 12th"],
         thumbnail: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "ca_foundation.html",
         desc: "Commerce + accounting pathway till Class 12.",
         instructor: "Rakesh Iyer",
         syllabus: ["Accounting basics", "Economics", "Business studies"]
@@ -1007,21 +1167,154 @@
         classLevels: ["After 12th"],
         thumbnail: "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?q=80&w=1200&auto=format&fit=crop",
         video: "test.mp4",
+        page: "upsc.html",
         desc: "Foundation program for UPSE after Class 12.",
         instructor: "Manish Chawla",
         syllabus: ["Current affairs", "Aptitude", "Essay writing"]
+      },
+      {
+        id: "c32",
+        title: "French Language",
+        price: 3499,
+        category: "Language",
+        classLevels: ["Languages"],
+        thumbnail: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        page: "french.html",
+        desc: "French beginner, intermediate, and advanced language training.",
+        instructor: "Claire Martin",
+        syllabus: ["Beginner", "Intermediate", "Advanced"]
+      },
+      {
+        id: "c33",
+        title: "German Language",
+        price: 3499,
+        category: "Language",
+        classLevels: ["Languages"],
+        thumbnail: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        page: "german.html",
+        desc: "German grammar, speaking, cases, listening, and exam practice.",
+        instructor: "Anika Weiss",
+        syllabus: ["Beginner", "Intermediate", "Advanced"]
+      },
+      {
+        id: "c34",
+        title: "Japanese Language",
+        price: 3999,
+        category: "Language",
+        classLevels: ["Languages"],
+        thumbnail: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        page: "japanese.html",
+        desc: "Japanese scripts, grammar, Kanji, conversation, and JLPT-style practice.",
+        instructor: "Yuki Tanaka",
+        syllabus: ["Beginner", "Intermediate", "Advanced"]
+      },
+      {
+        id: "c35",
+        title: "Spanish Language",
+        price: 3499,
+        category: "Language",
+        classLevels: ["Languages"],
+        thumbnail: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4?q=80&w=1200&auto=format&fit=crop",
+        video: "test.mp4",
+        page: "spanish.html",
+        desc: "Spanish vocabulary, grammar, speaking, reading, and exam practice.",
+        instructor: "Lucia Garcia",
+        syllabus: ["Beginner", "Intermediate", "Advanced"]
       }
     ]);
 
     const $ = (id) => document.getElementById(id);
 
     const loadState = () => {
-      state.courses = JSON.parse(localStorage.getItem("courses") || "null") || seedCourses();
+      const seededCourses = seedCourses();
+      const savedCourses = JSON.parse(localStorage.getItem("courses") || "null");
+      const seededIds = new Set(seededCourses.map(course => course.id));
+      state.courses = savedCourses
+        ? savedCourses.filter(course => seededIds.has(course.id)).map(course => ({ ...(seededCourses.find(seed => seed.id === course.id) || {}), ...course }))
+        : seededCourses;
+      seededCourses.forEach(seed => {
+        if (!state.courses.some(course => course.id === seed.id)) state.courses.push(seed);
+      });
+      saveCourses();
       state.user = JSON.parse(localStorage.getItem("user") || "null");
+      if (state.user) {
+        state.user.purchases = state.user.purchases || [];
+        syncRemotePurchases().catch(() => {});
+      }
     };
 
     const saveCourses = () => localStorage.setItem("courses", JSON.stringify(state.courses));
-    const saveUser = () => localStorage.setItem("user", JSON.stringify(state.user));
+    const saveUser = () => {
+      localStorage.setItem("user", JSON.stringify(state.user));
+      if (APP_CONFIG.localFallback && state.user?.email) {
+        const accounts = getLocalAccounts();
+        accounts[state.user.email] = { ...(accounts[state.user.email] || {}), ...state.user };
+        setLocalAccounts(accounts);
+      }
+    };
+
+    const getUserDisplayName = () => state.user?.name || state.user?.email || "Student";
+    const getInitials = (name) => (name || "P").trim().split(/\s+/).map(part => part[0]).join("").slice(0,2).toUpperCase();
+
+    const paintAvatar = (el, user) => {
+      if (!el) return;
+      const photo = user?.photo || "";
+      if (photo) {
+        el.style.backgroundImage = `url('${photo}')`;
+        el.style.backgroundSize = "cover";
+        el.style.backgroundPosition = "center";
+        el.textContent = "";
+      } else {
+        el.style.backgroundImage = "";
+        el.textContent = getInitials(user?.name || "PowerMind");
+      }
+    };
+
+    const renderProfile = () => {
+      const user = state.user;
+      const isLoggedIn = !!user;
+      $("profileShell").classList.toggle("hidden", !isLoggedIn);
+      if (!isLoggedIn) return;
+      const name = getUserDisplayName();
+      $("profileButtonName").textContent = name.length > 18 ? `${name.slice(0, 17)}...` : name;
+      $("profileMenuName").textContent = name;
+      $("profileMenuDetails").innerHTML = `DOB: ${user.dob || "-"}<br>Email: ${user.email || "-"}`;
+      paintAvatar($("profileAvatar"), user);
+      paintAvatar($("profileMenuAvatar"), user);
+    };
+
+    const syncRemoteStudent = async () => {
+      if (!state.user) return;
+      try {
+        const data = await apiPost("/api/students/upsert", state.user);
+        if (data.student) {
+          state.user = { ...state.user, ...data.student, purchases: data.student.purchases || state.user.purchases || [] };
+          saveUser();
+        }
+      } catch (err) {
+        console.warn("Student sync pending:", err.message);
+      }
+    };
+
+    const syncRemotePurchases = async () => {
+      if (!state.user?.id && !state.user?.email) return;
+      try {
+        const key = encodeURIComponent(state.user.id || state.user.email);
+        const data = await apiGet(`/api/purchases/list?student=${key}`);
+        if (Array.isArray(data.purchases)) {
+          state.user.purchases = data.purchases.map(item => item.course_id || item.courseId || item);
+          saveUser();
+          renderDashboard();
+          renderDashboardPage();
+          renderCourses();
+        }
+      } catch (err) {
+        console.warn("Purchase sync pending:", err.message);
+      }
+    };
 
     const classCategoryMap = {
       "Class 11": [
@@ -1046,6 +1339,12 @@
         "NEET Class 11+12",
         "UPSE (After 12)",
         "CA (Till Class 12)"
+      ],
+      "Languages": [
+        "French Language",
+        "German Language",
+        "Japanese Language",
+        "Spanish Language"
       ]
     };
 
@@ -1134,7 +1433,7 @@
         $("userStatus").textContent = "Not logged in";
         return;
       }
-      $("userStatus").textContent = `Logged in as ${state.user.mobile || state.user.email}`;
+      $("userStatus").textContent = `Logged in as ${state.user.email}`;
       const purchases = state.user.purchases || [];
       if (purchases.length === 0) {
         purchasedGrid.innerHTML = `<div class="muted">No purchases yet. Explore the catalog.</div>`;
@@ -1184,8 +1483,9 @@
     const renderAuthUI = () => {
       const isLoggedIn = !!state.user;
       $("btnLogin").classList.toggle("hidden", isLoggedIn);
-      $("btnLogout").classList.toggle("hidden", !isLoggedIn);
       $("guestVideo").classList.toggle("hidden", isLoggedIn);
+      $("profileMenu").classList.add("hidden");
+      renderProfile();
     };
 
     const renderAdmin = () => {
@@ -1217,7 +1517,7 @@
         usersBody.innerHTML = `
           <tr>
             <td>${state.user.email || "Guest User"}</td>
-            <td>${state.user.mobile || "-"}</td>
+            <td>${state.user.email || "-"}</td>
             <td>${(state.user.purchases || []).length}</td>
           </tr>`;
       }
@@ -1262,109 +1562,197 @@
       toggleModal("courseModal", true);
     };
 
-    // OTP flow (demo)
-    let otpInterval = null;
-    const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
-    const startOtpTimer = () => {
-      clearInterval(otpInterval);
-      otpInterval = setInterval(() => {
-        const remaining = Math.max(0, state.otpExpiry - Date.now());
-        const mins = Math.floor(remaining / 60000);
-        const secs = Math.floor((remaining % 60000) / 1000);
-        $("otpTimer").textContent = remaining > 0 ? `OTP expires in ${mins}:${secs.toString().padStart(2, "0")}` : "OTP expired";
-        if (remaining <= 0) clearInterval(otpInterval);
-      }, 1000);
+    // Email account flow: signup sends SMTP OTP, verification unlocks dashboard, login requires verified email.
+    let verificationInterval = null;
+    let resendReadyAt = 0;
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const localAccountsKey = "powermind_local_accounts";
+    const getLocalAccounts = () => JSON.parse(localStorage.getItem(localAccountsKey) || "{}");
+    const setLocalAccounts = (accounts) => localStorage.setItem(localAccountsKey, JSON.stringify(accounts));
+    const otpInputs = () => Array.from(document.querySelectorAll("#otpBoxes .otp-box"));
+    const getOtpCode = () => otpInputs().map(input => input.value.trim()).join("");
+    const clearOtpBoxes = () => {
+      otpInputs().forEach(input => { input.value = ""; });
+      otpInputs()[0]?.focus();
     };
 
-    // ── Fast2SMS config ──────────────────────────────────────────────
-    // 1. Sign up free at https://www.fast2sms.com
-    // 2. Go to Dev API → copy your API key → paste below
-    const FAST2SMS_API_KEY = "8v9uToJcY2GWsrX1fMml6bgpKOh4UnQLFkZCzjB7eEHxqDVt05dxQp7mj6cG2TBugsWnhyCSz38v14AY";
-    // ────────────────────────────────────────────────────────────────
-
-    const sendOtp = async () => {
-      const mobile = $("loginMobile").value.trim();
-      const email  = $("loginEmail").value.trim();
-
-      if (!mobile && !email) {
-        $("loginMsg").textContent = "Enter mobile number to receive OTP.";
-        return;
-      }
-
-      // Generate OTP and set expiry first
-      state.otp       = generateOtp();
-      state.otpExpiry = Date.now() + 2 * 60 * 1000;
-
-      // If no valid 10-digit mobile, fall back to showing OTP (email/demo mode)
-      if (!mobile || mobile.length < 10) {
-        $("loginMsg").textContent = `OTP (demo – no mobile): ${state.otp}`;
-        startOtpTimer();
-        return;
-      }
-
-      $("loginMsg").innerHTML = `<span class="loader"></span> Sending OTP…`;
-      $("btnSendOtp").disabled = true;
-
-      try {
-        const res = await fetch(
-          `https://www.fast2sms.com/dev/bulkV2?authorization=${FAST2SMS_API_KEY}&variables_values=${state.otp}&route=otp&numbers=${mobile}`,
-          { method: "GET" }
-        );
-        const data = await res.json();
-
-        if (data.return === true) {
-          $("loginMsg").textContent = "OTP sent to your mobile number.";
-          startOtpTimer();
-        } else {
-          // API returned an error – show OTP on screen as fallback
-          const reason = (data.message || []).join(", ") || "Unknown error";
-          $("loginMsg").textContent = `SMS failed (${reason}). OTP (fallback): ${state.otp}`;
-          startOtpTimer();
-        }
-      } catch (err) {
-        // Network / CORS error – fallback
-        $("loginMsg").textContent = `Network error. OTP (fallback): ${state.otp}`;
-        startOtpTimer();
-      } finally {
-        $("btnSendOtp").disabled = false;
-      }
-    };
-
-    const verifyOtp = () => {
-      const input = $("otpInput").value.trim();
-      if (!state.otp || Date.now() > state.otpExpiry) {
-        $("loginMsg").textContent = "OTP expired. Please resend.";
-        return;
-      }
-      if (input !== state.otp) {
-        $("loginMsg").textContent = "Invalid OTP. Try again.";
-        return;
-      }
-      const mobile = $("loginMobile").value.trim();
-      const email = $("loginEmail").value.trim();
-      const classLevel = $("loginClass").value;
-      if (!classLevel) {
-        $("loginMsg").textContent = "Please select your class.";
-        return;
-      }
-      state.user = { mobile, email, classLevel, purchases: state.user?.purchases || [] };
+    const completeLogin = async (user) => {
+      state.user = {
+        id: user.id || user.email,
+        name: user.name || "Student",
+        dob: user.dob || "",
+        email: user.email,
+        photo: user.photo || "",
+        classLevel: user.classLevel || "More",
+        purchases: user.purchases || []
+      };
       saveUser();
-      $("loginMsg").textContent = "Logged in successfully.";
+      await syncRemotePurchases();
       toggleModal("loginModal", false);
+      toggleModal("verificationModal", false);
       renderDashboard();
       renderAdmin();
       renderAuthUI();
       syncUserClassFilter();
     };
 
-    const resendOtp = () => {
-      const mobile = $("loginMobile").value.trim();
-      const email  = $("loginEmail").value.trim();
-      if (!mobile && !email) {
-        $("loginMsg").textContent = "Please enter mobile number first.";
-        return;
+    const startVerificationTimer = () => {
+      clearInterval(verificationInterval);
+      resendReadyAt = Date.now() + 60000;
+      $("btnResendVerification").disabled = true;
+      verificationInterval = setInterval(() => {
+        const remaining = Math.max(0, resendReadyAt - Date.now());
+        $("verificationTimer").textContent = remaining > 0
+          ? `Resend in ${Math.ceil(remaining / 1000)}s`
+          : "You can resend now";
+        if (remaining <= 0) {
+          $("btnResendVerification").disabled = false;
+          clearInterval(verificationInterval);
+        }
+      }, 250);
+    };
+
+    const openVerificationPage = (email) => {
+      state.pendingVerificationEmail = email;
+      clearOtpBoxes();
+      $("verificationMsg").textContent = "";
+      toggleModal("loginModal", false);
+      toggleModal("verificationModal", true);
+      window.location.hash = "verify-email";
+      startVerificationTimer();
+    };
+
+    const createAccount = async () => {
+      const payload = {
+        name: $("signupName").value.trim(),
+        dob: $("signupDob").value,
+        email: $("signupEmail").value.trim().toLowerCase(),
+        password: $("signupPassword").value,
+        photo: $("signupPhoto").value.trim(),
+        classLevel: $("signupClass").value
+      };
+
+      if (!payload.name) { $("loginMsg").textContent = "Please enter student name."; return; }
+      if (!emailPattern.test(payload.email)) { $("loginMsg").textContent = "Enter a valid email address."; return; }
+      if (payload.password.length < 8) { $("loginMsg").textContent = "Password must be at least 8 characters."; return; }
+      if (!payload.classLevel) { $("loginMsg").textContent = "Please select your class."; return; }
+
+      $("loginMsg").innerHTML = `<span class="loader"></span> Creating account...`;
+      $("btnCreateAccount").disabled = true;
+      try {
+        await apiPost("/api/signup", payload);
+        $("loginMsg").textContent = "Verification code sent.";
+        openVerificationPage(payload.email);
+      } catch (err) {
+        if (APP_CONFIG.localFallback) {
+          const accounts = getLocalAccounts();
+          accounts[payload.email] = {
+            id: payload.email,
+            name: payload.name,
+            dob: payload.dob,
+            email: payload.email,
+            password: payload.password,
+            photo: payload.photo,
+            classLevel: payload.classLevel,
+            purchases: accounts[payload.email]?.purchases || []
+          };
+          setLocalAccounts(accounts);
+          await completeLogin(accounts[payload.email]);
+          $("loginMsg").textContent = "Account created.";
+          return;
+        }
+        $("loginMsg").textContent = err.message || "Could not create account.";
+      } finally {
+        $("btnCreateAccount").disabled = false;
       }
-      sendOtp();
+    };
+
+    const signIn = async () => {
+      const email = $("signinEmail").value.trim().toLowerCase();
+      const password = $("signinPassword").value;
+
+      if (!emailPattern.test(email)) { $("loginMsg").textContent = "Enter a valid email address."; return; }
+      if (!password) { $("loginMsg").textContent = "Enter your password."; return; }
+
+      $("loginMsg").innerHTML = `<span class="loader"></span> Signing in...`;
+      $("btnSignIn").disabled = true;
+      try {
+        const data = await apiPost("/api/login", { email, password });
+        await completeLogin(data.user);
+        $("loginMsg").textContent = "Logged in successfully.";
+      } catch (err) {
+        if (APP_CONFIG.localFallback) {
+          const account = getLocalAccounts()[email];
+          if (!account || account.password !== password) {
+            $("loginMsg").textContent = "Invalid email or password.";
+            return;
+          }
+          await completeLogin(account);
+          $("loginMsg").textContent = "Logged in successfully.";
+          return;
+        }
+        $("loginMsg").textContent = err.message || "Login failed.";
+      } finally {
+        $("btnSignIn").disabled = false;
+      }
+    };
+
+    const verifyEmail = async () => {
+      const email = state.pendingVerificationEmail || $("signupEmail").value.trim().toLowerCase();
+      const code = getOtpCode();
+      if (!emailPattern.test(email)) { $("verificationMsg").textContent = "Start signup again to verify your email."; return; }
+      if (!/^\d{6}$/.test(code)) { $("verificationMsg").textContent = "Enter the complete 6-digit code."; return; }
+
+      $("verificationMsg").innerHTML = `<span class="loader"></span> Verifying...`;
+      $("btnVerifyEmail").disabled = true;
+      try {
+        const data = await apiPost("/api/verify-email", { email, code });
+        await completeLogin(data.user);
+        window.location.hash = "dashboard";
+      } catch (err) {
+        $("verificationMsg").textContent = err.message || "Verification failed.";
+      } finally {
+        $("btnVerifyEmail").disabled = false;
+      }
+    };
+
+    const resendVerification = async () => {
+      if (Date.now() < resendReadyAt) return;
+      const email = state.pendingVerificationEmail || $("signupEmail").value.trim().toLowerCase();
+      if (!emailPattern.test(email)) { $("verificationMsg").textContent = "Start signup again to resend verification."; return; }
+
+      $("verificationMsg").innerHTML = `<span class="loader"></span> Sending new code...`;
+      $("btnResendVerification").disabled = true;
+      try {
+        await apiPost("/api/resend-verification", { email });
+        clearOtpBoxes();
+        $("verificationMsg").textContent = "A new verification code was sent.";
+        startVerificationTimer();
+      } catch (err) {
+        $("verificationMsg").textContent = err.message || "Could not resend code.";
+        $("btnResendVerification").disabled = false;
+      }
+    };
+
+    const setupOtpInputs = () => {
+      otpInputs().forEach((input, index, inputs) => {
+        input.addEventListener("input", () => {
+          input.value = input.value.replace(/\D/g, "").slice(0, 1);
+          if (input.value && inputs[index + 1]) inputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && inputs[index - 1]) inputs[index - 1].focus();
+        });
+        input.addEventListener("paste", (event) => {
+          event.preventDefault();
+          const digits = event.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+          digits.split("").forEach((digit, digitIndex) => {
+            if (inputs[digitIndex]) inputs[digitIndex].value = digit;
+          });
+          inputs[Math.min(digits.length, inputs.length) - 1]?.focus();
+        });
+      });
     };
 
     // ── DISCOUNT CODES — add/remove codes here anytime ────────────
@@ -1454,24 +1842,68 @@
       completePayment(payState.courseId);
     };
 
-    const completePayment = (courseId) => {
+    const completePayment = async (courseId) => {
       $("paymentMsg").innerHTML = `<span class="loader"></span> Confirming...`;
-      setTimeout(() => {
-        if (!state.user.purchases.includes(courseId)) {
-          state.user.purchases.push(courseId);
-          saveUser();
+      const c = state.courses.find(course => course.id === courseId);
+      const purchasePayload = {
+        studentId: state.user?.id || state.user?.email,
+        studentEmail: state.user?.email,
+        courseId,
+        amount: payState.finalPrice,
+        originalAmount: payState.originalPrice,
+        method: payState.method,
+        transactionId: $("upiTxnInput")?.value?.trim() || `local-${Date.now()}`,
+        status: "paid"
+      };
+
+      try {
+        const data = await apiPost("/api/purchases/record", purchasePayload);
+        if (data.purchase?.course_id || data.purchase?.courseId) {
+          courseId = data.purchase.course_id || data.purchase.courseId;
         }
-        $("paymentMsg").textContent = "";
-        toggleModal("paymentModal", false);
-        renderDashboard(); renderAdmin(); renderCourses();
-        alert("✅ Course unlocked! Go to Dashboard to access it.");
-      }, 1000);
+      } catch (err) {
+        if (!APP_CONFIG.localFallback) {
+          $("paymentMsg").textContent = err.message || "Could not record payment.";
+          return;
+        }
+        console.warn("Purchase will stay local until backend is ready:", err.message);
+      }
+
+      state.user.purchases = state.user.purchases || [];
+      if (!state.user.purchases.includes(courseId)) state.user.purchases.push(courseId);
+      saveUser();
+      syncRemoteStudent().catch(() => {});
+      $("paymentMsg").textContent = "";
+      toggleModal("paymentModal", false);
+      renderDashboard(); renderAdmin(); renderCourses(); renderAuthUI();
+      alert(`? ${c?.title || "Course"} unlocked! Go to Dashboard to access it.`);
     };
 
     const accessCourse = (id) => {
       const c = state.courses.find(x => x.id === id);
       if (!c) return;
-      alert(`Accessing ${c.title} content... (demo)`);
+      const fallbackPages = {
+        c1: "jee.html", c2: "neet.html", c3: "class1_8.html", c4: "class10.html", c5: "class9.html", c6: "cuet.html", c7: "jee_class11.html", c8: "jee_class12.html", c9: "class11.html", c10: "class12.html", c11: "neet_class11.html", c12: "neet_class12.html", c13: "ca_foundation.html", c14: "upsc.html"
+      };
+      const lockedClassPages = {
+        "Class 1": "class1.html",
+        "Class 2": "class2.html",
+        "Class 3": "class3.html",
+        "Class 4": "class4.html",
+        "Class 5": "class5.html",
+        "Class 6": "class6.html",
+        "Class 7": "class7.html",
+        "Class 8": "class8.html"
+      };
+      const lockedClass = localStorage.getItem("powermind_class_choice_class1_8");
+      const page = id === "c3" && lockedClassPages[lockedClass]
+        ? lockedClassPages[lockedClass]
+        : c.page || fallbackPages[id];
+      if (!page) {
+        alert(`Course page for ${c.title} will be available soon.`);
+        return;
+      }
+      window.location.href = page;
     };
 
     // Admin actions (demo)
@@ -1541,9 +1973,11 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
     $("btnExplore").onclick = () => window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
-    $("btnSendOtp").onclick = sendOtp;
-    $("btnVerifyOtp").onclick = verifyOtp;
-    $("btnResendOtp").onclick = resendOtp;
+    $("btnCreateAccount").onclick = createAccount;
+    $("btnSignIn").onclick = signIn;
+    $("btnVerifyEmail").onclick = verifyEmail;
+    $("btnResendVerification").onclick = resendVerification;
+    setupOtpInputs();
     $("btnAddCourse").onclick = addCourse;
     $("btnSeed").onclick = () => {
       state.courses = seedCourses();
@@ -1551,9 +1985,10 @@
       renderCourses();
       renderAdmin();
     };
-    $("btnLogout").onclick = () => {
+    const logout = () => {
       state.user = null;
       localStorage.removeItem("user");
+      $("profileMenu").classList.add("hidden");
       renderDashboard();
       renderAdmin();
       renderAuthUI();
@@ -1561,7 +1996,47 @@
       $("dashboardPage").classList.add("hidden");
       $("homePage").classList.remove("hidden");
       document.body.classList.remove("dashboard-open");
+      window.resumeHeroSlideshow?.();
     };
+
+    $("btnLogout").onclick = logout;
+    $("btnProfile").onclick = () => $("profileMenu").classList.toggle("hidden");
+    $("btnSettings").onclick = () => {
+      $("profileMenu").classList.add("hidden");
+      $("settingsName").value = state.user?.name || "";
+      $("settingsDob").value = state.user?.dob || "";
+      $("settingsEmail").value = state.user?.email || "";
+      $("settingsPhoto").value = state.user?.photo || "";
+      setSettingsEditable(false);
+      toggleModal("settingsModal", true);
+    };
+    const setSettingsEditable = (editable) => {
+      ["settingsName", "settingsDob", "settingsEmail", "settingsPhoto"].forEach(id => {
+        $(id).disabled = !editable;
+      });
+      $("btnSaveSettings").classList.toggle("hidden", !editable);
+      $("btnEditSettings").classList.toggle("hidden", editable);
+    };
+    $("btnEditSettings").onclick = () => setSettingsEditable(true);
+    $("btnSaveSettings").onclick = async () => {
+      if (!state.user) return;
+      state.user = {
+        ...state.user,
+        name: $("settingsName").value.trim() || state.user.name,
+        dob: $("settingsDob").value,
+        email: $("settingsEmail").value.trim(),
+        photo: $("settingsPhoto").value.trim()
+      };
+      saveUser();
+      renderAuthUI();
+      renderDashboard();
+      renderAdmin();
+      await syncRemoteStudent();
+      toggleModal("settingsModal", false);
+    };
+    document.addEventListener("click", (event) => {
+      if (!$("profileShell").contains(event.target)) $("profileMenu").classList.add("hidden");
+    });
     $("searchInput").oninput = renderCourses;
     $("categoryFilter").onchange = renderCourses;
     $("classFilter").onchange = () => {
@@ -1591,6 +2066,7 @@
       $("dashboardPage").classList.add("hidden");
       $("homePage").classList.remove("hidden");
       document.body.classList.remove("dashboard-open");
+      window.resumeHeroSlideshow?.();
       window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
     };
 
@@ -1670,16 +2146,16 @@
     if (heroImgCurrent && heroImgNext) {
       const slides = [
         {
-          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/f_auto,q_auto/ChatGPT_Image_Mar_23_2026_11_43_59_AM_cjnnwn",
-          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1774289543/ChatGPT_Image_Mar_23_2026_09_43_26_AM_bk9ovk.png"
+          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182400_eoppwp.png",
+          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182400_eoppwp.png"
         },
         {
-          before: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?q=80&w=1200&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop"
+          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182407_mby2pv.png",
+          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182407_mby2pv.png"
         },
         {
-          before: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=1200&auto=format&fit=crop"
+          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182417_avvzuy.png",
+          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182417_avvzuy.png"
         },
         {
           before: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
@@ -1717,6 +2193,7 @@
       };
 
       const animateToSlide = (nextIndex) => {
+        if ($("homePage").classList.contains("hidden")) return;
         if (isAnimating) return;
         isAnimating = true;
         const nextSlide = slides[nextIndex];
@@ -1725,7 +2202,7 @@
         nextEl.classList.remove("slide-animate-in", "slide-animate-out");
         nextEl.classList.add("slide-next");
         nextEl.style.zIndex = "3";
-        currentEl.style.zIndex = "2";
+        currentEl.style.zIndex = "1";
         nextEl.getBoundingClientRect();
         nextEl.classList.remove("no-transition");
 
@@ -1737,7 +2214,9 @@
           nextEl.classList.add("slide-animate-in");
         });
 
+        let doneTimer = null;
         const onDone = () => {
+          if (doneTimer) clearTimeout(doneTimer);
           currentEl.classList.remove("slide-animate-out", "slide-current");
           nextEl.classList.remove("slide-animate-in", "slide-next");
           const temp = currentEl;
@@ -1752,15 +2231,28 @@
           isAnimating = false;
         };
         nextEl.addEventListener("transitionend", onDone, { once: true });
+        doneTimer = setTimeout(onDone, 900);
       };
 
       let slideTimer = null;
       const resetSlideTimer = () => {
         if (slideTimer) clearInterval(slideTimer);
         slideTimer = setInterval(() => {
+          if ($("homePage").classList.contains("hidden")) return;
           const nextIndex = (currentIndex + 1) % slides.length;
           animateToSlide(nextIndex);
         }, 3000);
+      };
+
+      window.resumeHeroSlideshow = () => {
+        isAnimating = false;
+        currentEl.classList.remove("slide-animate-out");
+        nextEl.classList.remove("slide-animate-in");
+        currentEl.classList.add("slide-current");
+        nextEl.classList.add("slide-next");
+        currentEl.style.zIndex = "2";
+        nextEl.style.zIndex = "1";
+        resetSlideTimer();
       };
 
       currentEl.classList.add("slide-current");
