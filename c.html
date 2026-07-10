@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Class 10 Course</title>
+<style>
+  :root{
+    --bg:#080d17;
+    --bg-soft:#0d1526;
+    --panel:#111b30;
+    --panel-2:#16213b;
+    --border:rgba(255,255,255,.08);
+    --accent:#2563eb;
+    --accent-2:#7c3aed;
+    --accent-3:#06b6d4;
+    --text:#eef2ff;
+    --muted:#9aa7c2;
+    --success:#22c55e;
+    --warn:#f59e0b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(124,58,237,.18), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(37,99,235,.18), transparent 45%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* HERO */
+  .hero{
+    padding:64px 20px 56px;
+    text-align:center;
+    background:linear-gradient(135deg,#1e3a8a,#5b21b6 60%,#0891b2);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 10px 40px rgba(0,0,0,.4);
+  }
+  .hero::after{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 120%, rgba(255,255,255,.15), transparent 60%);
+  }
+  .hero h1{font-size:clamp(30px,5vw,52px);letter-spacing:.5px;position:relative}
+  .hero p{opacity:.92;margin-top:10px;font-size:16px;position:relative}
+  .badge-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;position:relative}
+  .badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13px;backdrop-filter:blur(6px)}
+
+  .wrap{max-width:1200px;margin:auto;padding:30px 20px 60px}
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    border:1px solid var(--border);
+    backdrop-filter:blur(10px);
+    padding:28px;
+    border-radius:20px;
+    margin-bottom:26px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+  }
+  h2{color:#8ec2ff;margin-bottom:16px;font-size:22px;display:flex;align-items:center;gap:8px}
+  .subtext{color:var(--muted);font-size:14px;margin-bottom:18px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+  .item{
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    text-align:center;
+    cursor:pointer;
+    transition:.25s;
+    position:relative;
+  }
+  .item:hover{transform:translateY(-6px) scale(1.02);background:#233459;border-color:rgba(124,158,255,.4)}
+  .item span.icon{font-size:38px;display:block;margin-bottom:8px}
+  .item .label{font-weight:600;font-size:15px}
+  .item .sub{color:var(--muted);font-size:12px;margin-top:4px}
+
+  .back-btn{
+    padding:10px 18px;border:1px solid var(--border);border-radius:10px;
+    background:var(--panel-2);color:#fff;cursor:pointer;font-size:14px;
+    display:inline-flex;align-items:center;gap:6px;margin-bottom:18px;transition:.2s;
+  }
+  .back-btn:hover{background:var(--accent)}
+
+  .footer{text-align:center;padding:24px;color:#7684a3;font-size:13px}
+
+  /* ---------- SUBJECT VIDEO VIEWER (sidebar layout) ---------- */
+  .viewer-shell{display:flex;gap:22px;align-items:flex-start}
+  .sidebar{
+    width:270px;flex:0 0 270px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:14px;
+    max-height:640px;
+    overflow-y:auto;
+  }
+  .sidebar h3{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;padding:8px 10px 12px}
+  .chapter-btn{
+    display:flex;justify-content:space-between;align-items:center;
+    width:100%;text-align:left;background:transparent;border:none;color:var(--text);
+    padding:12px 10px;border-radius:10px;cursor:pointer;font-size:14px;margin-bottom:4px;
+    transition:.18s;
+  }
+  .chapter-btn:hover{background:var(--panel-2)}
+  .chapter-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent-2));font-weight:600}
+  .chapter-btn .count{font-size:11px;color:var(--muted);background:rgba(255,255,255,.08);padding:2px 8px;border-radius:999px}
+  .chapter-btn.active .count{color:#fff;background:rgba(255,255,255,.2)}
+
+  .content-area{flex:1;min-width:0}
+  .content-area h2{margin-bottom:4px}
+  .chapter-desc{color:var(--muted);font-size:13px;margin-bottom:18px}
+
+  .video-list{display:flex;flex-direction:column;gap:14px}
+  .video-card{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:14px;
+    padding:16px 18px;display:flex;align-items:center;gap:14px;transition:.2s;
+  }
+  .video-card:hover{border-color:rgba(124,158,255,.4)}
+  .video-thumb{
+    width:70px;height:52px;border-radius:10px;flex:0 0 70px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-3));
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+  }
+  .video-info{flex:1;min-width:0}
+  .video-info .vtitle{font-weight:600;font-size:14.5px}
+  .video-info .vmeta{color:var(--muted);font-size:12px;margin-top:3px}
+  .play-tag{font-size:12px;color:var(--accent-3);border:1px solid rgba(6,182,212,.4);padding:5px 12px;border-radius:8px;white-space:nowrap}
+
+  /* ---------- TEST SELECTION SCREENS ---------- */
+  .test-item{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:16px;
+    padding:20px;text-align:center;cursor:pointer;transition:.2s;
+  }
+  .test-item:hover{transform:translateY(-5px);background:#233459}
+  .test-item .icon{font-size:34px;display:block;margin-bottom:8px}
+
+  .mark-list{display:flex;flex-direction:column;gap:12px;max-width:420px}
+  .mark-item{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:14px;
+    padding:16px 20px;display:flex;justify-content:space-between;align-items:center;
+    cursor:pointer;transition:.2s;
+  }
+  .mark-item:hover{background:#233459;border-color:rgba(124,158,255,.4)}
+  .mark-item .mtitle{font-weight:600;font-size:15px}
+  .mark-item .mmeta{color:var(--muted);font-size:12px;margin-top:3px}
+  .mark-arrow{color:var(--accent-3);font-size:18px}
+
+  .chapter-test-row{
+    display:flex;justify-content:space-between;align-items:center;
+    background:var(--panel-2);border:1px solid var(--border);border-radius:14px;
+    padding:14px 18px;margin-bottom:10px;cursor:pointer;transition:.2s;
+  }
+  .chapter-test-row:hover{background:#233459}
+  .start-tag{font-size:12px;background:rgba(34,197,94,.15);color:var(--success);border:1px solid rgba(34,197,94,.35);padding:5px 12px;border-radius:8px}
+
+  .coming-soon{
+    text-align:center;padding:60px 20px;color:var(--muted);
+  }
+  .coming-soon .big{font-size:52px;margin-bottom:14px}
+  .coming-soon h3{color:#fff;font-size:20px;margin-bottom:8px}
+  .status-pill{
+    display:inline-block;margin-top:16px;background:rgba(245,158,11,.15);color:var(--warn);
+    border:1px solid rgba(245,158,11,.4);padding:6px 16px;border-radius:999px;font-size:13px;
+  }
+
+  .breadcrumb{color:var(--muted);font-size:13px;margin-bottom:16px}
+  .breadcrumb b{color:#fff}
+
+  @media(max-width:760px){
+    .viewer-shell{flex-direction:column}
+    .sidebar{width:100%;flex:none;max-height:220px}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>📚 Class 10 Complete Course</h1>
+  <p>Learning Portal • Videos • Tests • Organized Subject-wise</p>
+  <div class="badge-row">
+    <span class="badge">✅ CBSE Aligned</span>
+    <span class="badge">🎥 Chapter-wise Videos</span>
+    <span class="badge">📝 Structured Testing</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ HOME SCREEN ============ -->
+  <div id="home">
+    <div class="card">
+      <h2>ℹ️ Course Description</h2>
+      <p class="subtext" style="margin-bottom:0">This complete CBSE Class 10 course is designed to provide structured learning with high-quality chapter-wise video lessons. Every subject is organized separately so students can easily navigate through concepts, revise efficiently, and prepare confidently for school examinations and board exams.</p>
+    </div>
+
+    <div class="card">
+      <h2>📘 Subjects</h2>
+      <p class="subtext">Select a subject to view its chapters and video lessons</p>
+      <div class="grid" id="subjectGrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>📝 Tests</h2>
+      <p class="subtext">Choose the type of test you want to attempt</p>
+      <div class="grid">
+        <div class="test-item" onclick="openChapterTestSubjects()"><span class="icon">📘</span>Chapter Tests</div>
+        <div class="test-item" onclick="openSubjectTestSubjects()"><span class="icon">🎯</span>Subject Tests</div>
+        <div class="test-item" onclick="openMockTests()"><span class="icon">🧪</span>Mock Tests</div>
+        <div class="test-item" onclick="openFinalTest()"><span class="icon">🏆</span>Final Test</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUBJECT VIDEO VIEWER ============ -->
+  <div id="viewer" class="card" style="display:none">
+    <button class="back-btn" onclick="goHome()">⬅ Back to Home</button>
+    <div class="breadcrumb">Subjects &nbsp;›&nbsp; <b id="viewerSubjectName"></b></div>
+    <div class="viewer-shell">
+      <div class="sidebar">
+        <h3>Chapters</h3>
+        <div id="chapterList"></div>
+      </div>
+      <div class="content-area">
+        <h2 id="chapterTitle"></h2>
+        <p class="chapter-desc" id="chapterDesc"></p>
+        <div class="video-list" id="videoList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ CHAPTER TEST: pick subject ============ -->
+  <div id="ctSubjects" class="card" style="display:none">
+    <button class="back-btn" onclick="goHome()">⬅ Back to Home</button>
+    <h2>📘 Chapter Tests — Select Subject</h2>
+    <p class="subtext">Pick a subject to see its chapter-wise tests</p>
+    <div class="grid" id="ctSubjectGrid"></div>
+  </div>
+
+  <!-- ============ CHAPTER TEST: list of chapters for subject ============ -->
+  <div id="ctChapters" class="card" style="display:none">
+    <button class="back-btn" onclick="openChapterTestSubjects()">⬅ Back to Subjects</button>
+    <div class="breadcrumb">Chapter Tests &nbsp;›&nbsp; <b id="ctSubjectName"></b></div>
+    <h2>Select a Chapter to Start Test</h2>
+    <div id="ctChapterRows"></div>
+  </div>
+
+  <!-- ============ SUBJECT TEST: pick subject ============ -->
+  <div id="stSubjects" class="card" style="display:none">
+    <button class="back-btn" onclick="goHome()">⬅ Back to Home</button>
+    <h2>🎯 Subject Tests — Select Subject</h2>
+    <p class="subtext">Pick a subject, then choose a test difficulty by marks</p>
+    <div class="grid" id="stSubjectGrid"></div>
+  </div>
+
+  <!-- ============ SUBJECT TEST: marks dropdown ============ -->
+  <div id="stMarks" class="card" style="display:none">
+    <button class="back-btn" onclick="openSubjectTestSubjects()">⬅ Back to Subjects</button>
+    <div class="breadcrumb">Subject Tests &nbsp;›&nbsp; <b id="stSubjectName"></b></div>
+    <h2>Select Test by Marks</h2>
+    <p class="subtext">Choose the difficulty / length of the test</p>
+    <div class="mark-list">
+      <div class="mark-item" onclick="startSubjectTest(20)">
+        <div><div class="mtitle">20 Marks Test</div><div class="mmeta">Quick check • ~30 mins</div></div>
+        <div class="mark-arrow">➜</div>
+      </div>
+      <div class="mark-item" onclick="startSubjectTest(40)">
+        <div><div class="mtitle">40 Marks Test</div><div class="mmeta">Moderate coverage • ~60 mins</div></div>
+        <div class="mark-arrow">➜</div>
+      </div>
+      <div class="mark-item" onclick="startSubjectTest(70)">
+        <div><div class="mtitle">70 Marks Test</div><div class="mmeta">Full subject coverage • ~2 hrs</div></div>
+        <div class="mark-arrow">➜</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GENERIC "COMING SOON" / TEST START SCREEN ============ -->
+  <div id="genericScreen" class="card" style="display:none">
+    <button class="back-btn" id="genericBackBtn" onclick="goHome()">⬅ Back</button>
+    <div class="coming-soon">
+      <div class="big" id="genericIcon">🧪</div>
+      <h3 id="genericTitle">Coming Soon</h3>
+      <p id="genericSubtitle">This section will be available shortly.</p>
+      <span class="status-pill" id="genericPill">⏳ Will be uploaded soon</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">© PowerMind-369 Demo Course Layout</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+// Each subject -> array of chapters. Each chapter -> array of video titles (unlimited videos supported)
+const data = {
+  Mathematics: {
+    icon:"📐",
+    chapters:{
+      "Real Numbers":["Introduction to Real Numbers","Euclid's Division Lemma","Fundamental Theorem of Arithmetic","Irrational Numbers Proofs"],
+      "Polynomials":["Introduction to Polynomials","Zeroes of a Polynomial","Relationship Between Zeroes & Coefficients","Division Algorithm"],
+      "Linear Equations":["Pair of Linear Equations","Graphical Method","Substitution Method","Elimination Method","Cross Multiplication Method"],
+      "Quadratic Equations":["Introduction","Solving by Factorisation","Completing the Square","Quadratic Formula","Nature of Roots"],
+      "Arithmetic Progressions":["Introduction to AP","nth Term of AP","Sum of n Terms","Applications of AP"],
+      "Triangles":["Similar Triangles","Basic Proportionality Theorem","Criteria for Similarity","Areas of Similar Triangles","Pythagoras Theorem"],
+      "Coordinate Geometry":["Distance Formula","Section Formula","Area of Triangle"],
+      "Trigonometry":["Trigonometric Ratios","Trigonometric Identities","Heights and Distances"]
+    }
+  },
+  Science: {
+    icon:"🔬",
+    chapters:{
+      "Chemical Reactions":["Types of Chemical Reactions","Balancing Equations","Oxidation & Reduction"],
+      "Acids Bases Salts":["Properties of Acids & Bases","pH Scale","Salts and their Uses"],
+      "Metals & Non-metals":["Physical Properties","Chemical Properties","Reactivity Series","Corrosion"],
+      "Life Processes":["Nutrition","Respiration","Transportation","Excretion"],
+      "Light":["Reflection","Refraction","Lenses","Human Eye"],
+      "Electricity":["Electric Current","Ohm's Law","Series & Parallel Circuits","Electric Power"],
+      "Magnetic Effects":["Magnetic Field","Right Hand Rule","Electromagnetic Induction"],
+      "Environment":["Ecosystem","Food Chains","Environmental Problems"]
+    }
+  },
+  "Social Science": {
+    icon:"🌍",
+    chapters:{
+      "History":["Rise of Nationalism in Europe","Nationalism in India","Making of Global World","Print Culture"],
+      "Geography":["Resources & Development","Forest & Wildlife","Water Resources","Agriculture","Minerals & Energy"],
+      "Political Science":["Power Sharing","Federalism","Political Parties","Democracy & Diversity"],
+      "Economics":["Development","Sectors of Economy","Money & Credit","Globalisation"],
+      "Map Work":["Political Map Practice","Physical Map Practice"]
+    }
+  },
+  English: {
+    icon:"📖",
+    chapters:{
+      "First Flight":["A Letter to God","Nelson Mandela","Two Stories About Flying","From the Diary of Anne Frank"],
+      "Footprints Without Feet":["A Triumph of Surgery","The Thief's Story","Footprints Without Feet"],
+      "Grammar":["Tenses","Modals","Subject Verb Agreement","Reported Speech"],
+      "Writing Skills":["Letter Writing","Article Writing","Story Writing"],
+      "Reading Skills":["Unseen Passage Practice","Poem Analysis"]
+    }
+  },
+  Hindi: {
+    icon:"📝",
+    chapters:{
+      "गद्य":["सूरदास के पद","गद्य पाठ 2","गद्य पाठ 3"],
+      "काव्य":["काव्य खंड परिचय","कविता विश्लेषण"],
+      "व्याकरण":["संधि","समास","अलंकार"],
+      "लेखन":["पत्र लेखन","निबंध लेखन"],
+      "Revision":["Full Syllabus Revision"]
+    }
+  },
+  Computer: {
+    icon:"💻",
+    chapters:{
+      "Computer Basics":["Introduction to Computers","Input & Output Devices","Memory & Storage"],
+      "HTML":["HTML Basics","Tags & Elements","Forms in HTML","Tables in HTML"],
+      "CSS":["CSS Basics","Selectors","Flexbox","Grid Layout"],
+      "JavaScript":["JS Basics","Variables & Data Types","Functions","DOM Manipulation"],
+      "Python":["Python Basics","Loops & Conditions","Functions in Python","File Handling"],
+      "SQL":["Introduction to SQL","SELECT Queries","Joins","Aggregate Functions"],
+      "Cyber Safety":["Online Safety Tips","Password Security","Cyberbullying Awareness"],
+      "Practical Projects":["Mini Project 1","Mini Project 2"]
+    }
+  }
+};
+
+/* ---------------- SCREEN HELPERS ---------------- */
+const screens = ['home','viewer','ctSubjects','ctChapters','stSubjects','stMarks','genericScreen'];
+function showScreen(id){
+  screens.forEach(s=>{
+    document.getElementById(s).style.display = (s===id ? 'block' : 'none');
+  });
+}
+
+function goHome(){ showScreen('home'); }
+
+/* ---------------- BUILD HOME SUBJECT GRID ---------------- */
+function buildSubjectGrid(){
+  const grid = document.getElementById('subjectGrid');
+  grid.innerHTML = '';
+  Object.keys(data).forEach(subject=>{
+    const chapterCount = Object.keys(data[subject].chapters).length;
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.onclick = ()=>openSubject(subject);
+    div.innerHTML = `<span class="icon">${data[subject].icon}</span><div class="label">${subject}</div><div class="sub">${chapterCount} Chapters</div>`;
+    grid.appendChild(div);
+  });
+}
+
+/* ---------------- SUBJECT VIDEO VIEWER ---------------- */
+function openSubject(subject, chapterName){
+  showScreen('viewer');
+  document.getElementById('viewerSubjectName').textContent = subject;
+  const chapters = data[subject].chapters;
+  const chapterList = document.getElementById('chapterList');
+  chapterList.innerHTML = '';
+  const firstChapter = chapterName || Object.keys(chapters)[0];
+
+  Object.keys(chapters).forEach(ch=>{
+    const btn = document.createElement('button');
+    btn.className = 'chapter-btn' + (ch===firstChapter ? ' active' : '');
+    btn.innerHTML = `<span>${ch}</span><span class="count">${chapters[ch].length}</span>`;
+    btn.onclick = ()=>{
+      document.querySelectorAll('.chapter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderChapter(subject, ch);
+    };
+    chapterList.appendChild(btn);
+  });
+
+  renderChapter(subject, firstChapter);
+}
+
+function renderChapter(subject, chapterName){
+  document.getElementById('chapterTitle').textContent = chapterName;
+  document.getElementById('chapterDesc').textContent = `${data[subject].chapters[chapterName].length} video lesson(s) in this chapter`;
+  const videoList = document.getElementById('videoList');
+  videoList.innerHTML = '';
+  data[subject].chapters[chapterName].forEach((v,i)=>{
+    const card = document.createElement('div');
+    card.className = 'video-card';
+    card.innerHTML = `
+      <div class="video-thumb">🎥</div>
+      <div class="video-info">
+        <div class="vtitle">Lesson ${i+1}: ${v}</div>
+        <div class="vmeta">${subject} • ${chapterName}</div>
+      </div>
+      <div class="play-tag">▶ Watch</div>`;
+    videoList.appendChild(card);
+  });
+}
+
+/* ---------------- CHAPTER TESTS ---------------- */
+function openChapterTestSubjects(){
+  showScreen('ctSubjects');
+  const grid = document.getElementById('ctSubjectGrid');
+  grid.innerHTML = '';
+  Object.keys(data).forEach(subject=>{
+    const chapterCount = Object.keys(data[subject].chapters).length;
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.onclick = ()=>openChapterTestList(subject);
+    div.innerHTML = `<span class="icon">${data[subject].icon}</span><div class="label">${subject}</div><div class="sub">${chapterCount} Chapter Tests</div>`;
+    grid.appendChild(div);
+  });
+}
+
+function openChapterTestList(subject){
+  showScreen('ctChapters');
+  document.getElementById('ctSubjectName').textContent = subject;
+  const rows = document.getElementById('ctChapterRows');
+  rows.innerHTML = '';
+  Object.keys(data[subject].chapters).forEach(ch=>{
+    const row = document.createElement('div');
+    row.className = 'chapter-test-row';
+    row.onclick = ()=>startChapterTest(subject, ch);
+    row.innerHTML = `<div><b>${ch}</b><div class="mmeta" style="color:var(--muted);font-size:12px;margin-top:2px">${data[subject].chapters[ch].length} lessons covered</div></div><div class="start-tag">Start Test ➜</div>`;
+    rows.appendChild(row);
+  });
+}
+
+function startChapterTest(subject, chapter){
+  showGeneric({
+    icon:'📘',
+    title:`${chapter} — Chapter Test`,
+    subtitle:`${subject} • ${chapter} test content will be uploaded soon.`,
+    pill:'⏳ Will be uploaded soon',
+    backFn:()=>openChapterTestList(subject)
+  });
+}
+
+/* ---------------- SUBJECT TESTS ---------------- */
+function openSubjectTestSubjects(){
+  showScreen('stSubjects');
+  const grid = document.getElementById('stSubjectGrid');
+  grid.innerHTML = '';
+  Object.keys(data).forEach(subject=>{
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.onclick = ()=>openSubjectTestMarks(subject);
+    div.innerHTML = `<span class="icon">${data[subject].icon}</span><div class="label">${subject}</div><div class="sub">Full Subject Test</div>`;
+    grid.appendChild(div);
+  });
+}
+
+let currentTestSubject = '';
+function openSubjectTestMarks(subject){
+  currentTestSubject = subject;
+  showScreen('stMarks');
+  document.getElementById('stSubjectName').textContent = subject;
+}
+
+function startSubjectTest(marks){
+  showGeneric({
+    icon:'🎯',
+    title:`${currentTestSubject} — ${marks} Marks Test`,
+    subtitle:`This ${marks}-marks test for ${currentTestSubject} will be uploaded soon.`,
+    pill:'⏳ Will be uploaded soon',
+    backFn:()=>openSubjectTestMarks(currentTestSubject)
+  });
+}
+
+/* ---------------- MOCK TESTS ---------------- */
+function openMockTests(){
+  showGeneric({
+    icon:'🧪',
+    title:'Mock Tests',
+    subtitle:'Full-length mock tests will be uploaded soon. Stay tuned!',
+    pill:'⏳ Will be uploaded soon',
+    backFn: goHome
+  });
+}
+
+/* ---------------- FINAL REVISION TEST ---------------- */
+function openFinalTest(){
+  showGeneric({
+    icon:'🏆',
+    title:'Final Revision Test',
+    subtitle:'The complete final revision test covering all subjects will be uploaded soon.',
+    pill:'⏳ Will be uploaded soon',
+    backFn: goHome
+  });
+}
+
+/* ---------------- GENERIC SCREEN RENDERER ---------------- */
+function showGeneric({icon,title,subtitle,pill,backFn}){
+  showScreen('genericScreen');
+  document.getElementById('genericIcon').textContent = icon;
+  document.getElementById('genericTitle').textContent = title;
+  document.getElementById('genericSubtitle').textContent = subtitle;
+  document.getElementById('genericPill').textContent = pill;
+  document.getElementById('genericBackBtn').onclick = backFn;
+}
+
+/* ---------------- INIT ---------------- */
+buildSubjectGrid();
+</script>
+</body>
+</html>
