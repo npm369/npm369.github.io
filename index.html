@@ -64,6 +64,9 @@
     [data-theme="light"] .dash-content {
       background: #ffffff;
     }
+    [data-theme="light"] .hero-frame {
+      background: #ffffff;
+    }
 
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
@@ -758,8 +761,7 @@
           <div class="hero-dots" id="heroDots"></div>
         </div>
         <div class="row" style="margin-top:12px;">
-          <button class="btn primary" onclick="openCourse('c1')">View details</button>
-          <button class="btn ghost" onclick="startPurchase('c1')">Buy ₹14,999</button>
+          <button class="btn primary" onclick="handleHeroDetails()">View details</button>
         </div>
       </div>
     </section>
@@ -785,7 +787,6 @@
     <section id="catalog">
       <div class="section-title">
         <h2>Course Catalog</h2>
-        <div class="muted">Search, filter, and find your next skill.</div>
       </div>
       <div class="filters">
         <select id="classFilter">
@@ -1737,6 +1738,14 @@
       $(id).style.display = show ? "flex" : "none";
     };
 
+    window.handleHeroDetails = () => {
+      if (!state.user) {
+        toggleModal("loginModal", true);
+        return;
+      }
+      window.scrollTo({ top: $("catalog").offsetTop - 60, behavior: "smooth" });
+    };
+
     // Course details
     window.openCourse = (id) => {
       const c = state.courses.find(x => x.id === id);
@@ -2367,8 +2376,8 @@
           after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1783256086/Screenshot_2026-07-05_182417_avvzuy.png"
         },
         {
-          before: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1200&auto=format&fit=crop",
-          after: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop"
+          before: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1784221460/ChatGPT_Image_Jul_16_2026_10_31_32_PM_m8myct.png",
+          after: "https://res.cloudinary.com/dmkmf0owc/image/upload/v1784221460/ChatGPT_Image_Jul_16_2026_10_31_32_PM_m8myct.png"
         }
       ];
 
